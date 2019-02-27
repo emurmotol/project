@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package pb;
+
+
+
+//The AuthApi service definition.
+service AuthApi {
+ rpc Login (LoginRequest) returns (LoginReply);
+}
+
+message LoginRequest {}
+
+message LoginReply {}
+
