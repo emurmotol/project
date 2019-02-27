@@ -8,5 +8,5 @@ services:
     - .:/go/src/github.com/emurmotol/project/auth_api
     container_name: auth_api
     ports:
-    - 8081:8081
+    - 8800:8081
     - 8801:8082
