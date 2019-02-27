@@ -4,19 +4,19 @@ import "context"
 
 // AuthApiService describes the service.
 type AuthApiService interface {
-	Login(ctx context.Context, payload *LoginRequest) (data *LoginResponse, err error)
+	Login(ctx context.Context, payload *LoginInput) (data *LoginOutput, err error)
 }
 
-type LoginResponse struct{}
+type LoginInput struct{}
 
-type LoginRequest struct {
+type LoginOutput struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 }
 
 type basicAuthApiService struct{}
 
-func (b *basicAuthApiService) Login(ctx context.Context, payload *LoginRequest) (data *LoginResponse, err error) {
+func (b *basicAuthApiService) Login(ctx context.Context, payload *LoginInput) (data *LoginOutput, err error) {
 	// TODO implement the business logic of Login
 	return data, err
 }

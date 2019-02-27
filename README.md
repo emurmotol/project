@@ -18,6 +18,8 @@ go get -u -v github.com/kujtimiihoxha/kit
 Create a new service
 
 ```bash
+cd project
+
 kit new service auth_api
 
 kit generate service auth_api -w --gorilla

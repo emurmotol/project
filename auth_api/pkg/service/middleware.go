@@ -23,7 +23,7 @@ func LoggingMiddleware(logger log.Logger) Middleware {
 
 }
 
-func (l loggingMiddleware) Login(ctx context.Context, payload *LoginRequest) (data *LoginResponse, err error) {
+func (l loggingMiddleware) Login(ctx context.Context, payload *LoginInput) (data *LoginOutput, err error) {
 	defer func() {
 		l.logger.Log("method", "Login", "payload", payload, "data", data, "err", err)
 	}()
