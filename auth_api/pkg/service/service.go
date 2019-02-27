@@ -7,18 +7,20 @@ type AuthApiService interface {
 	Login(ctx context.Context, payload *LoginInput) (data *LoginOutput, err error)
 }
 
-type LoginInput struct{}
-
-type LoginOutput struct {
+type LoginInput struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
+}
+
+type LoginOutput struct {
+	Message string `json:"message"`
 }
 
 type basicAuthApiService struct{}
 
 func (b *basicAuthApiService) Login(ctx context.Context, payload *LoginInput) (data *LoginOutput, err error) {
 	// TODO implement the business logic of Login
-	return data, err
+	return &LoginOutput{Message: "OK"}, err
 }
 
 // NewBasicAuthApiService returns a naive, stateless implementation of AuthApiService.

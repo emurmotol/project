@@ -8,6 +8,6 @@ RUN go install github.com/canthefason/go-watcher/cmd/watcher
 
 WORKDIR /go/src/emurmotol/project/auth_api
 ENV GO111MODULE=on
-# RUN go mod tidy
+RUN go mod download
 
 ENTRYPOINT watcher -run /go/src/emurmotol/project/auth_api/cmd -watch /go/src/emurmotol/project/auth_api
