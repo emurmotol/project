@@ -9,13 +9,13 @@ import (
 
 // LoginRequest collects the request parameters for the Login method.
 type LoginRequest struct {
-	Payload *LoginInput `json:"payload"`
+	Payload *service.LoginInput `json:"payload"`
 }
 
 // LoginResponse collects the response parameters for the Login method.
 type LoginResponse struct {
-	Data *LoginOutput `json:"data"`
-	Err  error        `json:"err"`
+	Data *service.LoginOutput `json:"data"`
+	Err  error                `json:"err"`
 }
 
 // MakeLoginEndpoint returns an endpoint that invokes Login on the service.
@@ -43,7 +43,7 @@ type Failure interface {
 }
 
 // Login implements Service. Primarily useful in a client.
-func (e Endpoints) Login(ctx context.Context, payload *LoginInput) (data *LoginOutput, err error) {
+func (e Endpoints) Login(ctx context.Context, payload *service.LoginInput) (data *service.LoginOutput, err error) {
 	request := LoginRequest{Payload: payload}
 	response, err := e.LoginEndpoint(ctx, request)
 	if err != nil {

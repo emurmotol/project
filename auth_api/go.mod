@@ -1,4 +1,4 @@
-module github.com/emurmotol/project/auth_api/cmd
+module github.com/emurmotol/project/auth_api
 
 require (
 	github.com/Shopify/sarama v1.21.0 // indirect
@@ -23,7 +23,7 @@ require (
 	github.com/openzipkin/zipkin-go-opentracing v0.3.5
 	github.com/prometheus/client_golang v0.9.2
 	github.com/stretchr/testify v1.3.0 // indirect
-	golang.org/x/net v0.0.0-20190227022144-312bce6e941f
+	golang.org/x/net v0.0.0-20190227160552-c95aed5357e7
 	google.golang.org/grpc v1.19.0
 	sourcegraph.com/sourcegraph/appdash v0.0.0-20190107175209-d9ea5c54f7dc
 )

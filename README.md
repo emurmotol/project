@@ -37,4 +37,20 @@ go mod init github.com/emurmotol/project/auth_api/cmd
 go mod tidy
 ```
 
+Generate JWT certificates
+
+```bash
+cd auth_api
+
+mkdir certs
+
+openssl genrsa | openssl pkcs8 -topk8 -v2 aes-128-ecb -out certs/jwt.p8 -passout pass:
+
+openssl pkcs8 -in certs/jwt.p8 -out certs/jwt.pem -passin pass:
+
+openssl rsa -in certs/jwt.pem -out certs/jwt.key
+
+openssl rsa -in certs/jwt.key -pubout -out certs/jwt.key.pub
+```
+
 
