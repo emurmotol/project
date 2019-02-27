@@ -5,7 +5,7 @@ services:
       context: ./auth_api
     restart: always
     volumes:
-    - .:$HOME/auth_api
+    - .:/go/src/github.com/emurmotol/project/auth_api
     container_name: auth_api
     ports:
     - 8800:8081
