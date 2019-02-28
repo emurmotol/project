@@ -1,6 +1,9 @@
 package service
 
-import "context"
+import (
+	"context"
+	"errors"
+)
 
 // AuthApiService describes the service.
 type AuthApiService interface {
@@ -20,7 +23,7 @@ type basicAuthApiService struct{}
 
 func (b *basicAuthApiService) Login(ctx context.Context, payload *LoginInput) (data *LoginOutput, err error) {
 	// TODO implement the business logic of Login
-	return &LoginOutput{Message: "OK"}, err
+	return &LoginOutput{Message: "OK"}, errors.New("Error")
 }
 
 // NewBasicAuthApiService returns a naive, stateless implementation of AuthApiService.
