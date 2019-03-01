@@ -19,9 +19,10 @@ func makeLoginHandler(endpoints endpoint.Endpoints, options []grpc.ServerOption)
 // gRPC request to a user-domain sum request.
 func decodeLoginRequest(_ context.Context, r interface{}) (interface{}, error) {
 	req := r.(*pb.LoginRequest)
+	p := req.Payload
 	payload := &service.LoginInput{
-		Username: req.Payload.Username,
-		Password: req.Payload.Password,
+		Username: p.Username,
+		Password: p.Password,
 	}
 	return endpoint.LoginRequest{Payload: payload}, nil
 }
@@ -33,10 +34,11 @@ func encodeLoginResponse(_ context.Context, r interface{}) (interface{}, error) 
 	if res.Err != nil {
 		return nil, res.Err
 	}
+	d := res.Data
 	data := &pb.LoginOutput{
-		AccessToken: res.Data.AccessToken,
-		TokenType:   res.Data.TokenType,
-		ExpiresAt:   res.Data.ExpiresAt,
+		AccessToken: d.AccessToken,
+		TokenType:   d.TokenType,
+		ExpiresAt:   d.ExpiresAt,
 	}
 	return &pb.LoginReply{Data: data, Error: ""}, nil
 }
@@ -67,15 +69,16 @@ func encodeRestrictedResponse(_ context.Context, r interface{}) (interface{}, er
 	if res.Err != nil {
 		return nil, res.Err
 	}
+	c := res.Data.Claims
 	data := &pb.RestrictedOutput{
 		Claims: &pb.Claims{
-			Audience:  res.Data.Claims.Audience,
-			ExpiresAt: res.Data.Claims.ExpiresAt,
-			Id:        res.Data.Claims.Id,
-			IssuedAt:  res.Data.Claims.IssuedAt,
-			Issuer:    res.Data.Claims.Issuer,
-			NotBefore: res.Data.Claims.NotBefore,
-			Subject:   res.Data.Claims.Subject,
+			Audience:  c.Audience,
+			ExpiresAt: c.ExpiresAt,
+			Id:        c.Id,
+			IssuedAt:  c.IssuedAt,
+			Issuer:    c.Issuer,
+			NotBefore: c.NotBefore,
+			Subject:   c.Subject,
 		},
 	}
 	return &pb.RestrictedReply{Data: data, Error: ""}, nil
