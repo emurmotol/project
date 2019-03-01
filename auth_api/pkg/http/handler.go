@@ -53,6 +53,15 @@ func ErrorDecoder(r *http1.Response) error {
 // This is used to set the http status, see an example here :
 // https://github.com/go-kit/kit/blob/master/examples/addsvc/pkg/addtransport/http.go#L133
 func err2code(err error) int {
+	switch err {
+	case jwt.ErrTokenContextMissing,
+		jwt.ErrTokenInvalid,
+		jwt.ErrTokenExpired,
+		jwt.ErrTokenMalformed,
+		jwt.ErrTokenNotActive,
+		jwt.ErrUnexpectedSigningMethod:
+		return http1.StatusBadRequest
+	}
 	return http1.StatusInternalServerError
 }
 

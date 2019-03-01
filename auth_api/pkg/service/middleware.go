@@ -33,7 +33,7 @@ func (l loggingMiddleware) Login(ctx context.Context, payload *LoginInput) (data
 
 func (l loggingMiddleware) Restricted(ctx context.Context) (data *RestrictedOutput, err error) {
 	defer func() {
-		l.logger.Log("method", "Restricted", "data", fmt.Sprint(data), "err", err)
+		l.logger.Log("method", "Restricted", "data", fmt.Sprintln(data.Claims), "err", err)
 	}()
 	return l.next.Restricted(ctx)
 }

@@ -26,6 +26,7 @@ import (
 	zipkingoopentracing "github.com/openzipkin/zipkin-go-opentracing"
 	prometheus1 "github.com/prometheus/client_golang/prometheus"
 	promhttp "github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/spf13/viper"
 	grpc1 "google.golang.org/grpc"
 	appdash "sourcegraph.com/sourcegraph/appdash"
 	opentracing "sourcegraph.com/sourcegraph/appdash/opentracing"
@@ -47,6 +48,7 @@ var lightstepToken = fs.String("lightstep-token", "", "Enable LightStep tracing 
 var appdashAddr = fs.String("appdash-addr", "", "Enable Appdash tracing via an Appdash server host:port")
 
 func Run() {
+	viper.AutomaticEnv()
 	fs.Parse(os.Args[1:])
 
 	logger = log.NewLogfmtLogger(os.Stderr)
@@ -122,7 +124,7 @@ func getEndpointMiddleware(logger log.Logger) (mw map[string][]endpoint1.Middlew
 	addDefaultEndpointMiddleware(logger, duration, mw)
 
 	kf := func(token *stdjwt.Token) (interface{}, error) {
-		key, err := ioutil.ReadFile("/go/src/github.com/emurmotol/project/auth_api/certs/jwt.key.pub")
+		key, err := ioutil.ReadFile(viper.GetString("JWT_PUBLIC_KEY"))
 		if err != nil {
 			return nil, err
 		}

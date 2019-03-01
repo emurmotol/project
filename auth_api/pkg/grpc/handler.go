@@ -7,7 +7,6 @@ import (
 	pb "github.com/emurmotol/project/auth_api/pkg/grpc/pb"
 	"github.com/emurmotol/project/auth_api/pkg/service"
 	grpc "github.com/go-kit/kit/transport/grpc"
-	"github.com/labstack/gommon/log"
 	context1 "golang.org/x/net/context"
 )
 
@@ -57,8 +56,7 @@ func makeRestrictedHandler(endpoints endpoint.Endpoints, options []grpc.ServerOp
 // decodeRestrictedResponse is a transport/grpc.DecodeRequestFunc that converts a
 // gRPC request to a user-domain sum request.
 func decodeRestrictedRequest(_ context.Context, r interface{}) (interface{}, error) {
-	req := r.(*pb.RestrictedRequest)
-	log.Print(req)
+	_ = r.(*pb.RestrictedRequest)
 	return endpoint.RestrictedRequest{}, nil
 }
 
@@ -98,8 +96,7 @@ func makeHealthCheckHandler(endpoints endpoint.Endpoints, options []grpc.ServerO
 // decodeHealthCheckResponse is a transport/grpc.DecodeRequestFunc that converts a
 // gRPC request to a user-domain sum request.
 func decodeHealthCheckRequest(_ context.Context, r interface{}) (interface{}, error) {
-	req := r.(*pb.HealthCheckRequest)
-	log.Print(req)
+	_ = r.(*pb.HealthCheckRequest)
 	return endpoint.HealthCheckRequest{}, nil
 }
 

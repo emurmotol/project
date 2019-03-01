@@ -8,6 +8,7 @@ import (
 	stdjwt "github.com/dgrijalva/jwt-go"
 	"github.com/emurmotol/project/auth_api/pkg/utils"
 	"github.com/go-kit/kit/auth/jwt"
+	"github.com/spf13/viper"
 )
 
 // AuthApiService describes the service.
@@ -36,24 +37,24 @@ type basicAuthApiService struct{}
 
 func (b *basicAuthApiService) Login(ctx context.Context, payload *LoginInput) (data *LoginOutput, err error) {
 	now := time.Now()
-	expiresAt := now.Local().Add(time.Second * time.Duration(86400)).Unix()
+	expiresAt := now.Local().Add(time.Second * viper.GetDuration("JWT_EXPIRES_IN_SECONDS")).Unix()
 	claims := stdjwt.StandardClaims{
 		Audience:  "AUDIENCE_HERE",
 		ExpiresAt: expiresAt,
-		Id:        "USER_ID_HERE",
+		Id:        "ID_HERE",
 		IssuedAt:  now.Unix(),
 		Issuer:    "ISSUER_HERE",
 		NotBefore: 0,
 		Subject:   "SUBJECT_HERE",
 	}
-	token, err := utils.GenerateJwtToken(claims, "/go/src/github.com/emurmotol/project/auth_api/certs/jwt.key")
+	token, err := utils.GenerateJwtToken(claims, viper.GetString("JWT_PRIVATE_KEY"))
 	if err != nil {
 		return nil, err
 	}
 
 	data = &LoginOutput{
 		AccessToken: token,
-		TokenType:   "Bearer",
+		TokenType:   viper.GetString("JWT_TOKEN_TYPE"),
 		ExpiresAt:   time.Now().Unix(),
 	}
 	return data, nil
