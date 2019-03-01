@@ -30,9 +30,13 @@ kit generate service auth_api -w -t grpc
 Setup go mod
 
 ```bash
-cd auth_api
+cd project
 
-go mod init github.com/emurmotol/project/auth_api/cmd
+go mod init github.com/emurmotol/project
+
+go mod init github.com/emurmotol/project/auth_api
+
+cd auth_api
 
 go mod tidy
 ```
