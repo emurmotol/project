@@ -3,17 +3,20 @@ package service
 import (
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"net"
 	http1 "net/http"
 	"os"
 	"os/signal"
 	"syscall"
 
+	stdjwt "github.com/dgrijalva/jwt-go"
 	endpoint "github.com/emurmotol/project/auth_api/pkg/endpoint"
 	grpc "github.com/emurmotol/project/auth_api/pkg/grpc"
 	pb "github.com/emurmotol/project/auth_api/pkg/grpc/pb"
 	http "github.com/emurmotol/project/auth_api/pkg/http"
 	service "github.com/emurmotol/project/auth_api/pkg/service"
+	"github.com/go-kit/kit/auth/jwt"
 	endpoint1 "github.com/go-kit/kit/endpoint"
 	log "github.com/go-kit/kit/log"
 	prometheus "github.com/go-kit/kit/metrics/prometheus"
@@ -118,6 +121,14 @@ func getEndpointMiddleware(logger log.Logger) (mw map[string][]endpoint1.Middlew
 	}, []string{"method", "success"})
 	addDefaultEndpointMiddleware(logger, duration, mw)
 
+	kf := func(token *stdjwt.Token) (interface{}, error) {
+		key, err := ioutil.ReadFile("/go/src/github.com/emurmotol/project/auth_api/certs/jwt.key.pub")
+		if err != nil {
+			return nil, err
+		}
+		return stdjwt.ParseRSAPublicKeyFromPEM(key)
+	}
+	mw["Restricted"] = append(mw["Restricted"], jwt.NewParser(kf, stdjwt.SigningMethodRS256, jwt.StandardClaimsFactory))
 	return
 }
 func initMetricsEndpoint(g *group.Group) {

@@ -9,9 +9,15 @@ import (
 
 // NewGRPCServer makes a set of endpoints available as a gRPC AddServer
 type grpcServer struct {
-	login grpc.Handler
+	login       grpc.Handler
+	restricted  grpc.Handler
+	healthCheck grpc.Handler
 }
 
 func NewGRPCServer(endpoints endpoint.Endpoints, options map[string][]grpc.ServerOption) pb.AuthApiServer {
-	return &grpcServer{login: makeLoginHandler(endpoints, options["Login"])}
+	return &grpcServer{
+		healthCheck: makeHealthCheckHandler(endpoints, options["HealthCheck"]),
+		login:       makeLoginHandler(endpoints, options["Login"]),
+		restricted:  makeRestrictedHandler(endpoints, options["Restricted"]),
+	}
 }

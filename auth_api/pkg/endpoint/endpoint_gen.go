@@ -10,15 +10,27 @@ import (
 // meant to be used as a helper struct, to collect all of the endpoints into a
 // single parameter.
 type Endpoints struct {
-	LoginEndpoint endpoint.Endpoint
+	LoginEndpoint       endpoint.Endpoint
+	RestrictedEndpoint  endpoint.Endpoint
+	HealthCheckEndpoint endpoint.Endpoint
 }
 
 // New returns a Endpoints struct that wraps the provided service, and wires in all of the
 // expected endpoint middlewares
 func New(s service.AuthApiService, mdw map[string][]endpoint.Middleware) Endpoints {
-	eps := Endpoints{LoginEndpoint: MakeLoginEndpoint(s)}
+	eps := Endpoints{
+		HealthCheckEndpoint: MakeHealthCheckEndpoint(s),
+		LoginEndpoint:       MakeLoginEndpoint(s),
+		RestrictedEndpoint:  MakeRestrictedEndpoint(s),
+	}
 	for _, m := range mdw["Login"] {
 		eps.LoginEndpoint = m(eps.LoginEndpoint)
+	}
+	for _, m := range mdw["Restricted"] {
+		eps.RestrictedEndpoint = m(eps.RestrictedEndpoint)
+	}
+	for _, m := range mdw["HealthCheck"] {
+		eps.HealthCheckEndpoint = m(eps.HealthCheckEndpoint)
 	}
 	return eps
 }

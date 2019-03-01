@@ -2,7 +2,9 @@ package service
 
 import (
 	"context"
+	"fmt"
 
+	stdjwt "github.com/dgrijalva/jwt-go"
 	log "github.com/go-kit/kit/log"
 )
 
@@ -25,7 +27,21 @@ func LoggingMiddleware(logger log.Logger) Middleware {
 
 func (l loggingMiddleware) Login(ctx context.Context, payload *LoginInput) (data *LoginOutput, err error) {
 	defer func() {
-		l.logger.Log("method", "Login", "payload", payload, "data", data, "err", err)
+		l.logger.Log("method", "Login", "payload", fmt.Sprint(payload), "data", fmt.Sprint(data), "err", err)
 	}()
 	return l.next.Login(ctx, payload)
+}
+
+func (l loggingMiddleware) Restricted(ctx context.Context) (claims *stdjwt.StandardClaims, err error) {
+	defer func() {
+		l.logger.Log("method", "Restricted", "claims", fmt.Sprint(claims), "err", err)
+	}()
+	return l.next.Restricted(ctx)
+}
+
+func (l loggingMiddleware) HealthCheck(ctx context.Context) (status string, err error) {
+	defer func() {
+		l.logger.Log("method", "HealthCheck", "status", status, "err", err)
+	}()
+	return l.next.HealthCheck(ctx)
 }

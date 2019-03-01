@@ -13,5 +13,7 @@ import (
 func NewHTTPHandler(endpoints endpoint.Endpoints, options map[string][]http.ServerOption) http1.Handler {
 	m := mux.NewRouter()
 	makeLoginHandler(m, endpoints, options["Login"])
+	makeRestrictedHandler(m, endpoints, options["Restricted"])
+	makeHealthCheckHandler(m, endpoints, options["HealthCheck"])
 	return m
 }

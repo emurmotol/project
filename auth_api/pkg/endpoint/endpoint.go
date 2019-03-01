@@ -3,6 +3,7 @@ package endpoint
 import (
 	"context"
 
+	stdjwt "github.com/dgrijalva/jwt-go"
 	service "github.com/emurmotol/project/auth_api/pkg/service"
 	endpoint "github.com/go-kit/kit/endpoint"
 )
@@ -15,7 +16,7 @@ type LoginRequest struct {
 // LoginResponse collects the response parameters for the Login method.
 type LoginResponse struct {
 	Data *service.LoginOutput `json:"data"`
-	Err  error                `json:"err"`
+	Err  error                `json:"error"`
 }
 
 // MakeLoginEndpoint returns an endpoint that invokes Login on the service.
@@ -50,4 +51,74 @@ func (e Endpoints) Login(ctx context.Context, payload *service.LoginInput) (data
 		return
 	}
 	return response.(LoginResponse).Data, response.(LoginResponse).Err
+}
+
+// RestrictedRequest collects the request parameters for the Restricted method.
+type RestrictedRequest struct{}
+
+// RestrictedResponse collects the response parameters for the Restricted method.
+type RestrictedResponse struct {
+	Claims *stdjwt.StandardClaims `json:"claims"`
+	Err    error                  `json:"error"`
+}
+
+// MakeRestrictedEndpoint returns an endpoint that invokes Restricted on the service.
+func MakeRestrictedEndpoint(s service.AuthApiService) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		claims, err := s.Restricted(ctx)
+		return RestrictedResponse{
+			Claims: claims,
+			Err:    err,
+		}, nil
+	}
+}
+
+// Failed implements Failer.
+func (r RestrictedResponse) Failed() error {
+	return r.Err
+}
+
+// Restricted implements Service. Primarily useful in a client.
+func (e Endpoints) Restricted(ctx context.Context) (err error) {
+	request := RestrictedRequest{}
+	response, err := e.RestrictedEndpoint(ctx, request)
+	if err != nil {
+		return
+	}
+	return response.(RestrictedResponse).Err
+}
+
+// HealthCheckRequest collects the request parameters for the HealthCheck method.
+type HealthCheckRequest struct{}
+
+// HealthCheckResponse collects the response parameters for the HealthCheck method.
+type HealthCheckResponse struct {
+	Status string `json:"status"`
+	Err    error  `json:"error"`
+}
+
+// MakeHealthCheckEndpoint returns an endpoint that invokes HealthCheck on the service.
+func MakeHealthCheckEndpoint(s service.AuthApiService) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		status, err := s.HealthCheck(ctx)
+		return HealthCheckResponse{
+			Err:    err,
+			Status: status,
+		}, nil
+	}
+}
+
+// Failed implements Failer.
+func (r HealthCheckResponse) Failed() error {
+	return r.Err
+}
+
+// HealthCheck implements Service. Primarily useful in a client.
+func (e Endpoints) HealthCheck(ctx context.Context) (status string, err error) {
+	request := HealthCheckRequest{}
+	response, err := e.HealthCheckEndpoint(ctx, request)
+	if err != nil {
+		return
+	}
+	return response.(HealthCheckResponse).Status, response.(HealthCheckResponse).Err
 }

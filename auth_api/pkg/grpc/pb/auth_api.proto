@@ -6,10 +6,53 @@ package pb;
 
 //The AuthApi service definition.
 service AuthApi {
- rpc Login (LoginRequest) returns (LoginReply);
+ rpc Login       (LoginRequest      ) returns (LoginReply      );
+ rpc Restricted  (RestrictedRequest ) returns (RestrictedReply );
+ rpc HealthCheck (HealthCheckRequest) returns (HealthCheckReply);
 }
 
-message LoginRequest {}
+message LoginInput {
+ string Username = 1;
+ string Password = 2;
+}
 
-message LoginReply {}
+message LoginRequest {
+ LoginInput Payload = 1;
+ string     Error   = 2;
+}
+
+message LoginOutput {
+ string AccessToken = 1;
+ string TokenType   = 2;
+ int64  ExpiresAt   = 3;
+}
+
+message LoginReply {
+ LoginOutput Data  = 1;
+ string      Error = 2;
+}
+
+message RestrictedRequest {}
+
+message Claims {
+    string  Audience  = 1;
+    int64	ExpiresAt = 2;
+    string	Id        = 3;
+    int64	IssuedAt  = 4;
+    string	Issuer    = 5;
+    int64	NotBefore = 6;
+    string	Subject   = 7;
+}
+
+message RestrictedReply {
+ Claims Claims = 1;
+ string Error = 2;
+}
+
+message HealthCheckRequest {}
+
+message HealthCheckReply {
+ string Status = 1;
+ string Error  = 2;
+}
 

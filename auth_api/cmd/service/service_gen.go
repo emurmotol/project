@@ -22,21 +22,31 @@ func createService(endpoints endpoint.Endpoints) (g *group.Group) {
 	return g
 }
 func defaultHttpOptions(logger log.Logger, tracer opentracinggo.Tracer) map[string][]http.ServerOption {
-	options := map[string][]http.ServerOption{"Login": {http.ServerErrorEncoder(http1.ErrorEncoder), http.ServerErrorLogger(logger), http.ServerBefore(opentracing.HTTPToContext(tracer, "Login", logger))}}
+	options := map[string][]http.ServerOption{
+		"HealthCheck": {http.ServerErrorEncoder(http1.ErrorEncoder), http.ServerErrorLogger(logger), http.ServerBefore(opentracing.HTTPToContext(tracer, "HealthCheck", logger))},
+		"Login":       {http.ServerErrorEncoder(http1.ErrorEncoder), http.ServerErrorLogger(logger), http.ServerBefore(opentracing.HTTPToContext(tracer, "Login", logger))},
+		"Restricted":  {http.ServerErrorEncoder(http1.ErrorEncoder), http.ServerErrorLogger(logger), http.ServerBefore(opentracing.HTTPToContext(tracer, "Restricted", logger))},
+	}
 	return options
 }
 func defaultGRPCOptions(logger log.Logger, tracer opentracinggo.Tracer) map[string][]grpc.ServerOption {
-	options := map[string][]grpc.ServerOption{"Login": {grpc.ServerErrorLogger(logger), grpc.ServerBefore(opentracing.GRPCToContext(tracer, "Login", logger))}}
+	options := map[string][]grpc.ServerOption{
+		"HealthCheck": {grpc.ServerErrorLogger(logger), grpc.ServerBefore(opentracing.GRPCToContext(tracer, "HealthCheck", logger))},
+		"Login":       {grpc.ServerErrorLogger(logger), grpc.ServerBefore(opentracing.GRPCToContext(tracer, "Login", logger))},
+		"Restricted":  {grpc.ServerErrorLogger(logger), grpc.ServerBefore(opentracing.GRPCToContext(tracer, "Restricted", logger))},
+	}
 	return options
 }
 func addDefaultEndpointMiddleware(logger log.Logger, duration *prometheus.Summary, mw map[string][]endpoint1.Middleware) {
 	mw["Login"] = []endpoint1.Middleware{endpoint.LoggingMiddleware(log.With(logger, "method", "Login")), endpoint.InstrumentingMiddleware(duration.With("method", "Login"))}
+	mw["Restricted"] = []endpoint1.Middleware{endpoint.LoggingMiddleware(log.With(logger, "method", "Restricted")), endpoint.InstrumentingMiddleware(duration.With("method", "Restricted"))}
+	mw["HealthCheck"] = []endpoint1.Middleware{endpoint.LoggingMiddleware(log.With(logger, "method", "HealthCheck")), endpoint.InstrumentingMiddleware(duration.With("method", "HealthCheck"))}
 }
 func addDefaultServiceMiddleware(logger log.Logger, mw []service.Middleware) []service.Middleware {
 	return append(mw, service.LoggingMiddleware(logger))
 }
 func addEndpointMiddlewareToAllMethods(mw map[string][]endpoint1.Middleware, m endpoint1.Middleware) {
-	methods := []string{"Login"}
+	methods := []string{"Login", "Restricted", "HealthCheck"}
 	for _, v := range methods {
 		mw[v] = append(mw[v], m)
 	}
