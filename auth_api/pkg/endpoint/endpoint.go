@@ -3,7 +3,6 @@ package endpoint
 import (
 	"context"
 
-	stdjwt "github.com/dgrijalva/jwt-go"
 	service "github.com/emurmotol/project/auth_api/pkg/service"
 	endpoint "github.com/go-kit/kit/endpoint"
 )
@@ -58,17 +57,17 @@ type RestrictedRequest struct{}
 
 // RestrictedResponse collects the response parameters for the Restricted method.
 type RestrictedResponse struct {
-	Claims *stdjwt.StandardClaims `json:"claims"`
-	Err    error                  `json:"error"`
+	Data *service.RestrictedOutput `json:"data"`
+	Err  error                     `json:"error"`
 }
 
 // MakeRestrictedEndpoint returns an endpoint that invokes Restricted on the service.
 func MakeRestrictedEndpoint(s service.AuthApiService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		claims, err := s.Restricted(ctx)
+		data, err := s.Restricted(ctx)
 		return RestrictedResponse{
-			Claims: claims,
-			Err:    err,
+			Data: data,
+			Err:  err,
 		}, nil
 	}
 }

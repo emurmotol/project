@@ -13,7 +13,7 @@ import (
 // AuthApiService describes the service.
 type AuthApiService interface {
 	Login(ctx context.Context, payload *LoginInput) (data *LoginOutput, err error)
-	Restricted(ctx context.Context) (claims *stdjwt.StandardClaims, err error)
+	Restricted(ctx context.Context) (data *RestrictedOutput, err error)
 	HealthCheck(ctx context.Context) (status string, err error)
 }
 
@@ -28,11 +28,13 @@ type LoginOutput struct {
 	ExpiresAt   int64  `json:"expires_at"`
 }
 
+type RestrictedOutput struct {
+	Claims *stdjwt.StandardClaims `json:"claims"`
+}
+
 type basicAuthApiService struct{}
 
 func (b *basicAuthApiService) Login(ctx context.Context, payload *LoginInput) (data *LoginOutput, err error) {
-	// TODO implement the business logic of Login
-
 	now := time.Now()
 	expiresAt := now.Local().Add(time.Second * time.Duration(86400)).Unix()
 	claims := stdjwt.StandardClaims{
@@ -71,16 +73,14 @@ func New(middleware []Middleware) AuthApiService {
 	return svc
 }
 
-func (b *basicAuthApiService) Restricted(ctx context.Context) (claims *stdjwt.StandardClaims, err error) {
-	// TODO implement the business logic of Restricted
+func (b *basicAuthApiService) Restricted(ctx context.Context) (data *RestrictedOutput, err error) {
 	claims, ok := ctx.Value(jwt.JWTClaimsContextKey).(*stdjwt.StandardClaims)
 	if !ok {
 		return nil, errors.New("claims not ok")
 	}
-	return claims, nil
+	return &RestrictedOutput{Claims: claims}, nil
 }
 
 func (b *basicAuthApiService) HealthCheck(ctx context.Context) (status string, err error) {
-	// TODO implement the business logic of HealthCheck
 	return "OK", nil
 }

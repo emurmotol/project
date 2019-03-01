@@ -2,11 +2,12 @@ package grpc
 
 import (
 	"context"
-	"errors"
 
 	endpoint "github.com/emurmotol/project/auth_api/pkg/endpoint"
 	pb "github.com/emurmotol/project/auth_api/pkg/grpc/pb"
+	"github.com/emurmotol/project/auth_api/pkg/service"
 	grpc "github.com/go-kit/kit/transport/grpc"
+	"github.com/labstack/gommon/log"
 	context1 "golang.org/x/net/context"
 )
 
@@ -17,16 +18,28 @@ func makeLoginHandler(endpoints endpoint.Endpoints, options []grpc.ServerOption)
 
 // decodeLoginResponse is a transport/grpc.DecodeRequestFunc that converts a
 // gRPC request to a user-domain sum request.
-// TODO implement the decoder
 func decodeLoginRequest(_ context.Context, r interface{}) (interface{}, error) {
-	return nil, errors.New("'AuthApi' Decoder is not impelemented")
+	req := r.(*pb.LoginRequest)
+	payload := &service.LoginInput{
+		Username: req.Payload.Username,
+		Password: req.Payload.Password,
+	}
+	return endpoint.LoginRequest{Payload: payload}, nil
 }
 
 // encodeLoginResponse is a transport/grpc.EncodeResponseFunc that converts
 // a user-domain response to a gRPC reply.
-// TODO implement the encoder
 func encodeLoginResponse(_ context.Context, r interface{}) (interface{}, error) {
-	return nil, errors.New("'AuthApi' Encoder is not impelemented")
+	res := r.(endpoint.LoginResponse)
+	if res.Err != nil {
+		return nil, res.Err
+	}
+	data := &pb.LoginOutput{
+		AccessToken: res.Data.AccessToken,
+		TokenType:   res.Data.TokenType,
+		ExpiresAt:   res.Data.ExpiresAt,
+	}
+	return &pb.LoginReply{Data: data, Error: ""}, nil
 }
 func (g *grpcServer) Login(ctx context1.Context, req *pb.LoginRequest) (*pb.LoginReply, error) {
 	_, rep, err := g.login.ServeGRPC(ctx, req)
@@ -43,16 +56,31 @@ func makeRestrictedHandler(endpoints endpoint.Endpoints, options []grpc.ServerOp
 
 // decodeRestrictedResponse is a transport/grpc.DecodeRequestFunc that converts a
 // gRPC request to a user-domain sum request.
-// TODO implement the decoder
 func decodeRestrictedRequest(_ context.Context, r interface{}) (interface{}, error) {
-	return nil, errors.New("'AuthApi' Decoder is not impelemented")
+	req := r.(*pb.RestrictedRequest)
+	log.Print(req)
+	return endpoint.RestrictedRequest{}, nil
 }
 
 // encodeRestrictedResponse is a transport/grpc.EncodeResponseFunc that converts
 // a user-domain response to a gRPC reply.
-// TODO implement the encoder
 func encodeRestrictedResponse(_ context.Context, r interface{}) (interface{}, error) {
-	return nil, errors.New("'AuthApi' Encoder is not impelemented")
+	res := r.(endpoint.RestrictedResponse)
+	if res.Err != nil {
+		return nil, res.Err
+	}
+	data := &pb.RestrictedOutput{
+		Claims: &pb.Claims{
+			Audience:  res.Data.Claims.Audience,
+			ExpiresAt: res.Data.Claims.ExpiresAt,
+			Id:        res.Data.Claims.Id,
+			IssuedAt:  res.Data.Claims.IssuedAt,
+			Issuer:    res.Data.Claims.Issuer,
+			NotBefore: res.Data.Claims.NotBefore,
+			Subject:   res.Data.Claims.Subject,
+		},
+	}
+	return &pb.RestrictedReply{Data: data, Error: ""}, nil
 }
 func (g *grpcServer) Restricted(ctx context1.Context, req *pb.RestrictedRequest) (*pb.RestrictedReply, error) {
 	_, rep, err := g.restricted.ServeGRPC(ctx, req)
@@ -69,16 +97,20 @@ func makeHealthCheckHandler(endpoints endpoint.Endpoints, options []grpc.ServerO
 
 // decodeHealthCheckResponse is a transport/grpc.DecodeRequestFunc that converts a
 // gRPC request to a user-domain sum request.
-// TODO implement the decoder
 func decodeHealthCheckRequest(_ context.Context, r interface{}) (interface{}, error) {
-	return nil, errors.New("'AuthApi' Decoder is not impelemented")
+	req := r.(*pb.HealthCheckRequest)
+	log.Print(req)
+	return endpoint.HealthCheckRequest{}, nil
 }
 
 // encodeHealthCheckResponse is a transport/grpc.EncodeResponseFunc that converts
 // a user-domain response to a gRPC reply.
-// TODO implement the encoder
 func encodeHealthCheckResponse(_ context.Context, r interface{}) (interface{}, error) {
-	return nil, errors.New("'AuthApi' Encoder is not impelemented")
+	res := r.(endpoint.HealthCheckResponse)
+	if res.Err != nil {
+		return nil, res.Err
+	}
+	return &pb.HealthCheckReply{Status: res.Status, Error: ""}, nil
 }
 func (g *grpcServer) HealthCheck(ctx context1.Context, req *pb.HealthCheckRequest) (*pb.HealthCheckReply, error) {
 	_, rep, err := g.healthCheck.ServeGRPC(ctx, req)

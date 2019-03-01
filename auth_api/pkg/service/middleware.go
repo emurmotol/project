@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	stdjwt "github.com/dgrijalva/jwt-go"
 	log "github.com/go-kit/kit/log"
 )
 
@@ -32,9 +31,9 @@ func (l loggingMiddleware) Login(ctx context.Context, payload *LoginInput) (data
 	return l.next.Login(ctx, payload)
 }
 
-func (l loggingMiddleware) Restricted(ctx context.Context) (claims *stdjwt.StandardClaims, err error) {
+func (l loggingMiddleware) Restricted(ctx context.Context) (data *RestrictedOutput, err error) {
 	defer func() {
-		l.logger.Log("method", "Restricted", "claims", fmt.Sprint(claims), "err", err)
+		l.logger.Log("method", "Restricted", "data", fmt.Sprint(data), "err", err)
 	}()
 	return l.next.Restricted(ctx)
 }
