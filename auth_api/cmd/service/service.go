@@ -16,6 +16,7 @@ import (
 	pb "github.com/emurmotol/project/auth_api/pkg/grpc/pb"
 	http "github.com/emurmotol/project/auth_api/pkg/http"
 	service "github.com/emurmotol/project/auth_api/pkg/service"
+	"github.com/emurmotol/project/auth_api/pkg/utils"
 	"github.com/go-kit/kit/auth/jwt"
 	endpoint1 "github.com/go-kit/kit/endpoint"
 	log "github.com/go-kit/kit/log"
@@ -132,7 +133,7 @@ func getEndpointMiddleware(logger log.Logger) (mw map[string][]endpoint1.Middlew
 		return stdjwt.ParseRSAPublicKeyFromPEM(key)
 	}
 	cf := func() stdjwt.Claims {
-		return &service.JWTClaims{}
+		return &utils.JWTClaims{}
 	}
 	jwtParserMiddleware := jwt.NewParser(kf, stdjwt.SigningMethodRS256, cf)
 	mw["Restricted"] = append(mw["Restricted"], jwtParserMiddleware)
