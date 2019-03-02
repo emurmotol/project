@@ -2,14 +2,12 @@ version: "2"
 services:
   auth_api:
     build:
-      context: ./auth_api
+      context: .
     restart: always
     volumes:
-    - ./auth_api:/go/src/github.com/emurmotol/project/auth_api
+    - .:/go/src/github.com/emurmotol/project/auth_api
     container_name: auth_api
     ports:
-    # - 8800:8081
-    # - 8801:8082
     - 8081:8081
     - 8082:8082
     environment:

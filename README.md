@@ -1,40 +1,10 @@
 # Project
 
-Mono Repo Project
+This is the Mono Repo Project
 
-## Bootstrap Steps
-
-### Tools
-
-Download and install: https://github.com/protocolbuffers/protobuf/releases
+Generated with
 
 ```bash
-go get -u -v google.golang.org/grpc
-
-go get -u -v github.com/golang/protobuf/protoc-gen-go
-
-go get -u -v github.com/go-kit/kit
-
-go get -u -v github.com/kujtimiihoxha/kit
-```
-
-### Repository
-
-```
-# create repo in github then clone it:
-
-mkdir -p $GOPATH/src/github.com/emurmotol
-
-cd $GOPATH/src/github.com/emurmotol
-
-git clone git@github.com:emurmotol/project.git
-```
-
-### Create A New Service
-
-```bash
-cd project
-
 kit new service service_name
 
 # http transport
@@ -46,77 +16,54 @@ kit generate service service_name -w --gorilla
 kit generate service service_name -w -t grpc
 ```
 
-### Setup Go Modules
+## Getting Started
 
-```bash
-cd project
+- [Configuration](#configuration)
+- [Dependencies](#dependencies)
+- [Usage](#usage)
 
-go mod init
+## Configuration
 
-cd service_name
+- TODO: todo
 
-go mod init
+## Dependencies
 
-go mod tidy
-```
-
-## Postman Collection
-
-Import link: https://www.getpostman.com/collections/c162d7e4484b3c51e985
-
-## Microservices
-
-### auth_api - Authentication microservice
-
-#### Docker
+Download and install: https://github.com/protocolbuffers/protobuf/releases
 
 ```
-cd project
-
-docker-compose up auth_api
-
-# or
-
-docker pull emurmotol/auth_api:latest
-
-docker run --rm -it -p 8081:8081 -p 8082:8082 -v /home/emur/go/src/github.com/emurmotol/project/auth_api/certs:/go/src/github.com/emurmotol/project/auth_api/certs emurmotol/auth_api:latest
+TODO
 ```
 
-#### Generate JWT Certificates
+## Usage
 
-```bash
-cd auth_api
+A Makefile is included for convenience
 
-mkdir certs
-
-openssl genrsa | openssl pkcs8 -topk8 -v2 aes-128-ecb -out certs/jwt.p8 -passout pass:
-
-openssl pkcs8 -in certs/jwt.p8 -out certs/jwt.pem -passin pass:
-
-openssl rsa -in certs/jwt.pem -out certs/jwt.key
-
-openssl rsa -in certs/jwt.key -pubout -out certs/jwt.key.pub
+Install the dependencies
+```
+make
 ```
 
-#### gRPC client
+Build the binaries
+```
+make build
+```
 
-proto: https://github.com/emurmotol/project/tree/master/auth_api/pkg/grpc/pb
+Run the service
+```
+./service_name/service_name
+```
 
-#### HTTP endpoints
+Build a docker image
+```
+make docker
+```
 
-Included in the postman collection [import link](https://www.getpostman.com/collections/c162d7e4484b3c51e985) above
+Run start the services
+```
+make docker-compose
+```
 
-location: (project/auth_api)
-
-## Donations
-
-If you like it you can send a small donation to any of the following addresses:
-
-BTC: `3P1eTCYEcFGoN4bCfRAUbedfqK17DCMM5R`
-
-ETH: `0x4939e019c56a8885bcd5fac11eba1cb1b147dc6e`
-
-XRP: `rU2mEJSLqBRkYLVTv55rFTgQajkLTnT6mA` DT: `110892`
-
-BAT: `0x0a317eA88131eFD0FC48E0ac9945996Eb690dbc0`
-
+Run tests
+```
+make test
+```

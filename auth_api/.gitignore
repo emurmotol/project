@@ -1,3 +1,4 @@
 vendor
 certs/*
 !certs/.keep
+auth_api
