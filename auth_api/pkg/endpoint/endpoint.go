@@ -23,10 +23,7 @@ func MakeLoginEndpoint(s service.AuthApiService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(LoginRequest)
 		data, err := s.Login(ctx, req.LoginInput)
-		return LoginResponse{
-			Data: data,
-			Err:  err,
-		}, nil
+		return LoginResponse{Data: data, Err: err}, nil
 	}
 }
 
@@ -65,10 +62,7 @@ type RestrictedResponse struct {
 func MakeRestrictedEndpoint(s service.AuthApiService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		data, err := s.Restricted(ctx)
-		return RestrictedResponse{
-			Data: data,
-			Err:  err,
-		}, nil
+		return RestrictedResponse{Data: data, Err: err}, nil
 	}
 }
 
@@ -100,10 +94,7 @@ type HealthCheckResponse struct {
 func MakeHealthCheckEndpoint(s service.AuthApiService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		status, err := s.HealthCheck(ctx)
-		return HealthCheckResponse{
-			Err:    err,
-			Status: status,
-		}, nil
+		return HealthCheckResponse{Status: status, Err: err}, nil
 	}
 }
 
