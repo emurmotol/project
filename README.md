@@ -16,6 +16,18 @@ go get -u -v github.com/go-kit/kit
 go get -u -v github.com/kujtimiihoxha/kit
 ```
 
+Repository
+
+```
+# create repo in github the clone it:
+
+mkdir -p $GOPATH/src/github.com/emurmotol
+
+cd $GOPATH/src/github.com/emurmotol
+
+git clone git@github.com:emurmotol/project.git
+```
+
 Create a new service
 
 ```bash
