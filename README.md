@@ -50,7 +50,7 @@ Build a docker image
 make docker
 ```
 
-Run start the services
+Start the services
 ```bash
 make docker-compose
 ```
