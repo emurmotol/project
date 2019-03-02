@@ -45,7 +45,7 @@ Run the service
 ./service_name/service_name
 ```
 
-Build a docker image
+Build a docker images
 ```bash
 make docker
 ```
