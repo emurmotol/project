@@ -125,17 +125,17 @@ func getEndpointMiddleware(logger log.Logger) (mw map[string][]endpoint1.Middlew
 	addDefaultEndpointMiddleware(logger, duration, mw)
 
 	// jwt middleware
-	kf := func(token *stdjwt.Token) (interface{}, error) {
+	keyFunc := func(token *stdjwt.Token) (interface{}, error) {
 		key, err := ioutil.ReadFile(viper.GetString("JWT_PUBLIC_KEY"))
 		if err != nil {
 			return nil, err
 		}
 		return stdjwt.ParseRSAPublicKeyFromPEM(key)
 	}
-	cf := func() stdjwt.Claims {
+	newClaims := func() stdjwt.Claims {
 		return &utils.JWTClaims{}
 	}
-	jwtParserMiddleware := jwt.NewParser(kf, stdjwt.SigningMethodRS256, cf)
+	jwtParserMiddleware := jwt.NewParser(keyFunc, stdjwt.SigningMethodRS256, newClaims)
 	mw["Restricted"] = append(mw["Restricted"], jwtParserMiddleware)
 	return
 }
