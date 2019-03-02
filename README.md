@@ -27,7 +27,7 @@ kit generate service auth_api -w --gorilla
 kit generate service auth_api -w -t grpc
 ```
 
-Setup go mod
+Setup go modules
 
 ```bash
 cd project
