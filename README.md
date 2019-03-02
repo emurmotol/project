@@ -49,11 +49,11 @@ Setup go modules
 ```bash
 cd project
 
-go mod init github.com/emurmotol/project
-
-go mod init github.com/emurmotol/project/service_name
+go mod init
 
 cd service_name
+
+go mod init
 
 go mod tidy
 ```
