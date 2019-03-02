@@ -3,16 +3,13 @@
 This is the Mono Repo Project
 
 Generated with
-
 ```bash
 kit new service service_name
 
 # http transport
-
 kit generate service service_name -w --gorilla
 
 # grpc transport
-
 kit generate service service_name -w -t grpc
 ```
 
@@ -29,8 +26,7 @@ kit generate service service_name -w -t grpc
 ## Dependencies
 
 Download and install: https://github.com/protocolbuffers/protobuf/releases
-
-```
+```bash
 TODO
 ```
 
@@ -39,31 +35,31 @@ TODO
 A Makefile is included for convenience
 
 Install the dependencies
-```
+```bash
 make
 ```
 
 Build the binaries
-```
+```bash
 make build
 ```
 
 Run the service
-```
+```bash
 ./service_name/service_name
 ```
 
 Build a docker image
-```
+```bash
 make docker
 ```
 
 Run start the services
-```
+```bash
 make docker-compose
 ```
 
 Run tests
-```
+```bash
 make test
 ```
