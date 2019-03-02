@@ -9,7 +9,7 @@ import (
 
 // LoginRequest collects the request parameters for the Login method.
 type LoginRequest struct {
-	Payload *service.LoginInput `json:"payload"`
+	*service.LoginInput
 }
 
 // LoginResponse collects the response parameters for the Login method.
@@ -22,7 +22,7 @@ type LoginResponse struct {
 func MakeLoginEndpoint(s service.AuthApiService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(LoginRequest)
-		data, err := s.Login(ctx, req.Payload)
+		data, err := s.Login(ctx, req.LoginInput)
 		return LoginResponse{
 			Data: data,
 			Err:  err,
@@ -44,7 +44,7 @@ type Failure interface {
 
 // Login implements Service. Primarily useful in a client.
 func (e Endpoints) Login(ctx context.Context, payload *service.LoginInput) (data *service.LoginOutput, err error) {
-	request := LoginRequest{Payload: payload}
+	request := LoginRequest{payload}
 	response, err := e.LoginEndpoint(ctx, request)
 	if err != nil {
 		return

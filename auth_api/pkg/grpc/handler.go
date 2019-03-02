@@ -19,12 +19,11 @@ func makeLoginHandler(endpoints endpoint.Endpoints, options []grpc.ServerOption)
 // gRPC request to a user-domain sum request.
 func decodeLoginRequest(_ context.Context, r interface{}) (interface{}, error) {
 	req := r.(*pb.LoginRequest)
-	p := req.Payload
-	payload := &service.LoginInput{
-		Username: p.Username,
-		Password: p.Password,
+	loginInput := &service.LoginInput{
+		Username: req.Username,
+		Password: req.Password,
 	}
-	return endpoint.LoginRequest{Payload: payload}, nil
+	return endpoint.LoginRequest{loginInput}, nil
 }
 
 // encodeLoginResponse is a transport/grpc.EncodeResponseFunc that converts

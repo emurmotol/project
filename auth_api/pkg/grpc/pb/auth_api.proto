@@ -11,14 +11,9 @@ service AuthApi {
  rpc HealthCheck (HealthCheckRequest) returns (HealthCheckReply);
 }
 
-message LoginInput {
- string Username = 1;
- string Password = 2;
-}
-
 message LoginRequest {
- LoginInput Payload = 1;
- string     Error   = 2;
+    string Username = 1;
+    string Password = 2;
 }
 
 message LoginOutput {
