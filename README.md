@@ -6,7 +6,7 @@ This is the Mono Repo Project
 
 - [Configuration](#configuration)
 - [Dependencies](#dependencies)
-- [Microservices](#microservices)
+- [Services](#services)
 - [Usage](#usage)
 - [Postman Collection](#postman-collection)
 - [Donations](#donations)
@@ -22,7 +22,7 @@ Download and install: https://github.com/protocolbuffers/protobuf/releases
 TODO
 ```
 
-## Microservices
+## Services
 
 - [Auth API](https://github.com/emurmotol/project/tree/master/auth_api)
 
