@@ -55,7 +55,7 @@ func (b *basicAuthApiService) Login(ctx context.Context, payload *LoginInput) (d
 	data = &LoginOutput{
 		AccessToken: token,
 		TokenType:   viper.GetString("JWT_TOKEN_TYPE"),
-		ExpiresAt:   time.Now().Unix(),
+		ExpiresAt:   expiresAt,
 	}
 	return data, nil
 }
