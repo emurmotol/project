@@ -57,4 +57,7 @@ openssl rsa -in certs/jwt.pem -out certs/jwt.key
 openssl rsa -in certs/jwt.key -pubout -out certs/jwt.key.pub
 ```
 
+Postman collection
+
+Import link: https://www.getpostman.com/collections/c162d7e4484b3c51e985
 
