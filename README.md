@@ -4,7 +4,10 @@ This is the Mono Repo Project
 
 Generated with
 ```bash
+# create a new service
 kit new service service_name
+
+# add endpoints to the service
 
 # http transport
 kit generate service service_name -w --gorilla
