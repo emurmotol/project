@@ -1,7 +1,7 @@
 # auth
 Authentication Microservice
 
-## Pre-Installation
+## Bootstrap Steps
 
 Download and install: https://github.com/protocolbuffers/protobuf/releases
 
