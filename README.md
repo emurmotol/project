@@ -4,6 +4,8 @@ Mono Repo Project
 
 ## Bootstrap Steps
 
+### Tools
+
 Download and install: https://github.com/protocolbuffers/protobuf/releases
 
 ```bash
@@ -16,7 +18,7 @@ go get -u -v github.com/go-kit/kit
 go get -u -v github.com/kujtimiihoxha/kit
 ```
 
-Repository
+### Repository
 
 ```
 # create repo in github then clone it:
@@ -28,7 +30,7 @@ cd $GOPATH/src/github.com/emurmotol
 git clone git@github.com:emurmotol/project.git
 ```
 
-Create a new service
+### Create A New Service
 
 ```bash
 cd project
@@ -44,7 +46,7 @@ kit generate service service_name -w --gorilla
 kit generate service service_name -w -t grpc
 ```
 
-Setup go modules
+### Setup Go Modules
 
 ```bash
 cd project
@@ -66,21 +68,21 @@ Import link: https://www.getpostman.com/collections/c162d7e4484b3c51e985
 
 ### auth_api - Authentication microservice
 
-Docker
+#### Docker
 
 ```
-docker pull emurmotol/auth_api:latest
-
-docker run --rm -it -p 8081:8081 -p 8082:8082 -v /home/emur/go/src/github.com/emurmotol/project/auth_api/certs:/go/src/github.com/emurmotol/project/auth_api/certs emurmotol/auth_api:latest
-
-# or
-
 cd project
 
 docker-compose up auth_api
+
+# or
+
+docker pull emurmotol/auth_api:latest
+
+docker run --rm -it -p 8081:8081 -p 8082:8082 -v /home/emur/go/src/github.com/emurmotol/project/auth_api/certs:/go/src/github.com/emurmotol/project/auth_api/certs emurmotol/auth_api:latest
 ```
 
-Generate JWT certificates
+#### Generate JWT Certificates
 
 ```bash
 cd auth_api
@@ -96,11 +98,11 @@ openssl rsa -in certs/jwt.pem -out certs/jwt.key
 openssl rsa -in certs/jwt.key -pubout -out certs/jwt.key.pub
 ```
 
-gRPC client
+#### gRPC client
 
 proto: https://github.com/emurmotol/project/tree/master/auth_api/pkg/grpc/pb
 
-HTTP endpoints
+#### HTTP endpoints
 
 Included in postman collection import link above
 
