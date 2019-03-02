@@ -21,11 +21,15 @@ Create a new service
 ```bash
 cd project
 
-kit new service auth_api
+kit new service service_name
 
-kit generate service auth_api -w --gorilla
+# http transport
 
-kit generate service auth_api -w -t grpc
+kit generate service service_name -w --gorilla
+
+# grpc transport
+
+kit generate service service_name -w -t grpc
 ```
 
 Setup go modules
@@ -35,27 +39,11 @@ cd project
 
 go mod init github.com/emurmotol/project
 
-go mod init github.com/emurmotol/project/auth_api
+go mod init github.com/emurmotol/project/service_name
 
-cd auth_api
+cd service_name
 
 go mod tidy
-```
-
-Generate JWT certificates
-
-```bash
-cd auth_api
-
-mkdir certs
-
-openssl genrsa | openssl pkcs8 -topk8 -v2 aes-128-ecb -out certs/jwt.p8 -passout pass:
-
-openssl pkcs8 -in certs/jwt.p8 -out certs/jwt.pem -passin pass:
-
-openssl rsa -in certs/jwt.pem -out certs/jwt.key
-
-openssl rsa -in certs/jwt.key -pubout -out certs/jwt.key.pub
 ```
 
 ## Postman Collection
@@ -73,10 +61,26 @@ docker pull emurmotol/auth_api:latest
 
 docker run --rm -it -p 8081:8081 -p 8082:8082 emurmotol/auth_api:latest
 
-or
+# or
 
 cd project
 
 docker-compose up auth_api
+```
+
+Generate JWT certificates
+
+```bash
+cd auth_api
+
+mkdir certs
+
+openssl genrsa | openssl pkcs8 -topk8 -v2 aes-128-ecb -out certs/jwt.p8 -passout pass:
+
+openssl pkcs8 -in certs/jwt.p8 -out certs/jwt.pem -passin pass:
+
+openssl rsa -in certs/jwt.pem -out certs/jwt.key
+
+openssl rsa -in certs/jwt.key -pubout -out certs/jwt.key.pub
 ```
 
