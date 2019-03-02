@@ -19,7 +19,7 @@ go get -u -v github.com/kujtimiihoxha/kit
 Repository
 
 ```
-# create repo in github the clone it:
+# create repo in github then clone it:
 
 mkdir -p $GOPATH/src/github.com/emurmotol
 
