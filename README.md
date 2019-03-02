@@ -96,3 +96,13 @@ openssl rsa -in certs/jwt.pem -out certs/jwt.key
 openssl rsa -in certs/jwt.key -pubout -out certs/jwt.key.pub
 ```
 
+gRPC client
+
+proto: https://github.com/emurmotol/project/tree/master/auth_api/pkg/grpc/pb
+
+HTTP endpoints
+
+Included in postman collection provided above
+
+location: (project/auth_api)
+
