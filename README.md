@@ -104,7 +104,7 @@ proto: https://github.com/emurmotol/project/tree/master/auth_api/pkg/grpc/pb
 
 #### HTTP endpoints
 
-Included in postman collection import link above
+Included in the postman collection import link above
 
 location: (project/auth_api)
 
