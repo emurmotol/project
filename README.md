@@ -1,5 +1,10 @@
-# auth
-Authentication Microservice
+# project
+
+Mono Repo Project
+
+## Microservices
+
+auth_api - Authentication microservice
 
 ## Bootstrap Steps
 
