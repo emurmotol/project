@@ -79,6 +79,7 @@ func encodeRestrictedResponse(_ context.Context, r interface{}) (interface{}, er
 			Issuer:    c.Issuer,
 			NotBefore: c.NotBefore,
 			Subject:   c.Subject,
+			UserID:    c.UserID,
 		},
 	}
 	return &pb.RestrictedReply{Data: data, Error: ""}, nil

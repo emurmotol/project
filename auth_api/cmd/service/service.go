@@ -131,7 +131,10 @@ func getEndpointMiddleware(logger log.Logger) (mw map[string][]endpoint1.Middlew
 		}
 		return stdjwt.ParseRSAPublicKeyFromPEM(key)
 	}
-	jwtParserMiddleware := jwt.NewParser(kf, stdjwt.SigningMethodRS256, jwt.StandardClaimsFactory)
+	cf := func() stdjwt.Claims {
+		return &service.JWTClaims{}
+	}
+	jwtParserMiddleware := jwt.NewParser(kf, stdjwt.SigningMethodRS256, cf)
 	mw["Restricted"] = append(mw["Restricted"], jwtParserMiddleware)
 	return
 }

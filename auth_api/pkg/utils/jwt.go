@@ -6,7 +6,7 @@ import (
 	stdjwt "github.com/dgrijalva/jwt-go"
 )
 
-func GenerateJwtToken(claims stdjwt.StandardClaims, privateKeyPath string) (string, error) {
+func GenerateJWTToken(claims stdjwt.Claims, privateKeyPath string) (string, error) {
 	key, err := ioutil.ReadFile(privateKeyPath)
 	if err != nil {
 		return "", err

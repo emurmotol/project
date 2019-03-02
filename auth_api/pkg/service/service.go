@@ -30,24 +30,33 @@ type LoginOutput struct {
 }
 
 type RestrictedOutput struct {
-	Claims *stdjwt.StandardClaims `json:"claims"`
+	Claims *JWTClaims `json:"claims"`
+}
+
+type JWTClaims struct {
+	UserID int64 `json:"user_id"`
+	stdjwt.StandardClaims
 }
 
 type basicAuthApiService struct{}
 
 func (b *basicAuthApiService) Login(ctx context.Context, payload *LoginInput) (data *LoginOutput, err error) {
+	userID := int64(1234567890)
 	now := time.Now()
 	expiresAt := now.Local().Add(time.Second * viper.GetDuration("JWT_EXPIRES_IN_SECONDS")).Unix()
-	claims := stdjwt.StandardClaims{
-		Audience:  "AUDIENCE_HERE",
-		ExpiresAt: expiresAt,
-		Id:        "ID_HERE",
-		IssuedAt:  now.Unix(),
-		Issuer:    "ISSUER_HERE",
-		NotBefore: 0,
-		Subject:   "SUBJECT_HERE",
+	claims := &JWTClaims{
+		userID,
+		stdjwt.StandardClaims{
+			Audience:  "AUDIENCE_HERE",
+			ExpiresAt: expiresAt,
+			Id:        "ID_HERE",
+			IssuedAt:  now.Unix(),
+			Issuer:    "ISSUER_HERE",
+			NotBefore: 0,
+			Subject:   "SUBJECT_HERE",
+		},
 	}
-	token, err := utils.GenerateJwtToken(claims, viper.GetString("JWT_PRIVATE_KEY"))
+	token, err := utils.GenerateJWTToken(claims, viper.GetString("JWT_PRIVATE_KEY"))
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +84,7 @@ func New(middleware []Middleware) AuthApiService {
 }
 
 func (b *basicAuthApiService) Restricted(ctx context.Context) (data *RestrictedOutput, err error) {
-	claims, ok := ctx.Value(jwt.JWTClaimsContextKey).(*stdjwt.StandardClaims)
+	claims, ok := ctx.Value(jwt.JWTClaimsContextKey).(*JWTClaims)
 	if !ok {
 		return nil, errors.New("claims not ok")
 	}
