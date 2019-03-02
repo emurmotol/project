@@ -71,7 +71,7 @@ Docker
 ```
 docker pull emurmotol/auth_api:latest
 
-docker run --rm -it -p 8081:8081 -p 8082:8082 emurmotol/auth_api:latest
+docker run --rm -it -p 8081:8081 -p 8082:8082 -v /home/emur/go/src/github.com/emurmotol/project/auth_api/certs:/go/src/github.com/emurmotol/project/auth_api/certs emurmotol/auth_api:latest
 
 # or
 
@@ -102,7 +102,7 @@ proto: https://github.com/emurmotol/project/tree/master/auth_api/pkg/grpc/pb
 
 HTTP endpoints
 
-Included in postman collection provided above
+Included in postman collection import link above
 
 location: (project/auth_api)
 
