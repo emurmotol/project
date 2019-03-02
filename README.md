@@ -2,10 +2,6 @@
 
 Mono Repo Project
 
-## Microservices
-
-auth_api - Authentication microservice
-
 ## Bootstrap Steps
 
 Download and install: https://github.com/protocolbuffers/protobuf/releases
@@ -62,7 +58,25 @@ openssl rsa -in certs/jwt.pem -out certs/jwt.key
 openssl rsa -in certs/jwt.key -pubout -out certs/jwt.key.pub
 ```
 
-Postman collection
+## Postman Collection
 
 Import link: https://www.getpostman.com/collections/c162d7e4484b3c51e985
+
+## Microservices
+
+### auth_api - Authentication microservice
+
+Docker
+
+```
+docker pull emurmotol/auth_api:latest
+
+docker run --rm -it -p 8081:8081 -p 8082:8082 emurmotol/auth_api:latest
+
+or
+
+cd project
+
+docker-compose up auth_api
+```
 
