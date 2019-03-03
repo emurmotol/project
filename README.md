@@ -25,6 +25,7 @@ Installable via Makefile
 - [GoKit CLI](https://github.com/kujtimiihoxha/kit)
 - [gqlgen](https://github.com/99designs/gqlgen)
 - [dataloaden](github.com/vektah/dataloaden)
+- [postgres](https://www.postgresql.org/)
 
 ## Configuration
 

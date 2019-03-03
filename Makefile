@@ -1,5 +1,3 @@
-GOPATH:=$(shell go env GOPATH)
-
 .PHONY: jwt-certs
 jwt-certs:
 	openssl genrsa | openssl pkcs8 -topk8 -v2 aes-128-ecb -out ./auth_api/certs/jwt.p8 -passout pass:
@@ -52,3 +50,9 @@ user_api:
 .PHONY: api
 api:
 	docker-compose -f ./api/docker-compose.yml up api
+
+.PHONY: server
+server:
+	mkdir -p ./server/postgres/data
+	mkdir -p ./server/redis/data
+	docker-compose -f ./server/docker-compose.yml up
