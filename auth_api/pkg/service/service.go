@@ -13,14 +13,9 @@ import (
 
 // AuthApiService describes the service.
 type AuthApiService interface {
-	Login(ctx context.Context, payload *LoginInput) (data *LoginOutput, err error)
+	Login(ctx context.Context, username string, password string) (data *LoginOutput, err error)
 	Restricted(ctx context.Context) (data *RestrictedOutput, err error)
 	HealthCheck(ctx context.Context) (status string, err error)
-}
-
-type LoginInput struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
 }
 
 type LoginOutput struct {
@@ -35,7 +30,7 @@ type RestrictedOutput struct {
 
 type basicAuthApiService struct{}
 
-func (b *basicAuthApiService) Login(ctx context.Context, payload *LoginInput) (data *LoginOutput, err error) {
+func (b *basicAuthApiService) Login(ctx context.Context, username string, password string) (data *LoginOutput, err error) {
 	userID := int64(1234567890)
 	now := time.Now()
 	expiresAt := now.Local().Add(time.Second * viper.GetDuration("JWT_EXPIRES_IN_SECONDS")).Unix()

@@ -9,7 +9,8 @@ import (
 
 // LoginRequest collects the request parameters for the Login method.
 type LoginRequest struct {
-	*service.LoginInput
+	Username string `json:"username"`
+	Password string `json:"password"`
 }
 
 // LoginResponse collects the response parameters for the Login method.
@@ -22,8 +23,11 @@ type LoginResponse struct {
 func MakeLoginEndpoint(s service.AuthApiService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(LoginRequest)
-		data, err := s.Login(ctx, req.LoginInput)
-		return LoginResponse{Data: data, Err: err}, nil
+		data, err := s.Login(ctx, req.Username, req.Password)
+		return LoginResponse{
+			Data: data,
+			Err:  err,
+		}, nil
 	}
 }
 
@@ -40,8 +44,8 @@ type Failure interface {
 }
 
 // Login implements Service. Primarily useful in a client.
-func (e Endpoints) Login(ctx context.Context, payload *service.LoginInput) (data *service.LoginOutput, err error) {
-	request := LoginRequest{payload}
+func (e Endpoints) Login(ctx context.Context, username string, password string) (data *service.LoginOutput, err error) {
+	request := LoginRequest{Username: username, Password: password}
 	response, err := e.LoginEndpoint(ctx, request)
 	if err != nil {
 		return
@@ -62,7 +66,10 @@ type RestrictedResponse struct {
 func MakeRestrictedEndpoint(s service.AuthApiService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		data, err := s.Restricted(ctx)
-		return RestrictedResponse{Data: data, Err: err}, nil
+		return RestrictedResponse{
+			Data: data,
+			Err:  err,
+		}, nil
 	}
 }
 
@@ -94,7 +101,10 @@ type HealthCheckResponse struct {
 func MakeHealthCheckEndpoint(s service.AuthApiService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		status, err := s.HealthCheck(ctx)
-		return HealthCheckResponse{Status: status, Err: err}, nil
+		return HealthCheckResponse{
+			Status: status,
+			Err:    err,
+		}, nil
 	}
 }
 

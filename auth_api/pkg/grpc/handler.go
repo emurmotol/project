@@ -5,7 +5,6 @@ import (
 
 	endpoint "github.com/emurmotol/project/auth_api/pkg/endpoint"
 	pb "github.com/emurmotol/project/auth_api/pkg/grpc/pb"
-	"github.com/emurmotol/project/auth_api/pkg/service"
 	grpc "github.com/go-kit/kit/transport/grpc"
 	context1 "golang.org/x/net/context"
 )
@@ -19,11 +18,7 @@ func makeLoginHandler(endpoints endpoint.Endpoints, options []grpc.ServerOption)
 // gRPC request to a user-domain sum request.
 func decodeLoginRequest(_ context.Context, r interface{}) (interface{}, error) {
 	req := r.(*pb.LoginRequest)
-	loginInput := &service.LoginInput{
-		Username: req.Username,
-		Password: req.Password,
-	}
-	return endpoint.LoginRequest{loginInput}, nil
+	return endpoint.LoginRequest{Username: req.Username, Password: req.Password}, nil
 }
 
 // encodeLoginResponse is a transport/grpc.EncodeResponseFunc that converts

@@ -25,6 +25,7 @@ TODO
 ## Services
 
 - [Auth API](https://github.com/emurmotol/project/tree/master/auth_api)
+- [User API](https://github.com/emurmotol/project/tree/master/user_api)
 
 ## Usage
 

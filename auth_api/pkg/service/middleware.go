@@ -24,11 +24,11 @@ func LoggingMiddleware(logger log.Logger) Middleware {
 
 }
 
-func (l loggingMiddleware) Login(ctx context.Context, payload *LoginInput) (data *LoginOutput, err error) {
+func (l loggingMiddleware) Login(ctx context.Context, username string, password string) (data *LoginOutput, err error) {
 	defer func() {
-		l.logger.Log("method", "Login", "payload", fmt.Sprint(payload), "data", fmt.Sprint(data), "err", err)
+		l.logger.Log("method", "Login", "username", username, "password", password, "data", fmt.Sprint(data), "err", err)
 	}()
-	return l.next.Login(ctx, payload)
+	return l.next.Login(ctx, username, password)
 }
 
 func (l loggingMiddleware) Restricted(ctx context.Context) (data *RestrictedOutput, err error) {

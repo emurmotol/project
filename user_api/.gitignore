@@ -1,0 +1,4 @@
+vendor
+certs/*
+!certs/.keep
+user_api
