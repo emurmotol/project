@@ -4,29 +4,37 @@ This is the Mono Repo Project
 
 ## Getting Started
 
-- [Configuration](#configuration)
 - [Dependencies](#dependencies)
+- [Configuration](#configuration)
 - [Services](#services)
 - [Usage](#usage)
 - [Postman Collection](#postman-collection)
 - [Donations](#donations)
 
-## Configuration
-
-- TODO: todo
-
 ## Dependencies
 
-Download and install: https://github.com/protocolbuffers/protobuf/releases
-```bash
-TODO
-```
+Manually install
+- [Go](https://golang.org/dl/)
+- [Docker](https://www.docker.com/get-started)
+- [protobuf](https://github.com/protocolbuffers/protobuf/releases)
+
+Installable via Makefile
+- [gRPC-Go](https://github.com/grpc/grpc-go)
+- [protoc-gen-go](https://github.com/golang/protobuf/tree/master/protoc-gen-go)
+- [GoKit](https://gokit.io/)
+- [GoKit CLI](https://github.com/kujtimiihoxha/kit)
+- [gqlgen](https://github.com/99designs/gqlgen)
+- [dataloaden](github.com/vektah/dataloaden)
+
+## Configuration
+
+- GO111MODULE=on
 
 ## Services
 
+- [API](https://github.com/emurmotol/project/tree/master/api)
 - [Auth API](https://github.com/emurmotol/project/tree/master/auth_api)
 - [User API](https://github.com/emurmotol/project/tree/master/user_api)
-- [API](https://github.com/emurmotol/project/tree/master/api)
 
 ## Usage
 
