@@ -4,17 +4,17 @@ import "context"
 
 // UserApiService describes the service.
 type UserApiService interface {
-	GetByUsername(ctx context.Context, username string) (data *GetByUsernameOutput, err error)
+	GetByUsername(ctx context.Context, username string) (data *GetByUsernameData, err error)
 }
 
-type GetByUsernameOutput struct {
+type GetByUsernameData struct {
 	Username string `json:"username"`
 }
 
 type basicUserApiService struct{}
 
-func (b *basicUserApiService) GetByUsername(ctx context.Context, username string) (data *GetByUsernameOutput, err error) {
-	return &GetByUsernameOutput{Username: username}, nil
+func (b *basicUserApiService) GetByUsername(ctx context.Context, username string) (data *GetByUsernameData, err error) {
+	return &GetByUsernameData{Username: username}, nil
 }
 
 // NewBasicUserApiService returns a naive, stateless implementation of UserApiService.

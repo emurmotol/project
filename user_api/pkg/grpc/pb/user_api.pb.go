@@ -61,39 +61,39 @@ func (m *GetByUsernameRequest) GetUsername() string {
 	return ""
 }
 
-type GetByUsernameOutput struct {
+type GetByUsernameData struct {
 	Username             string   `protobuf:"bytes,1,opt,name=Username,proto3" json:"Username,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *GetByUsernameOutput) Reset()         { *m = GetByUsernameOutput{} }
-func (m *GetByUsernameOutput) String() string { return proto.CompactTextString(m) }
-func (*GetByUsernameOutput) ProtoMessage()    {}
-func (*GetByUsernameOutput) Descriptor() ([]byte, []int) {
+func (m *GetByUsernameData) Reset()         { *m = GetByUsernameData{} }
+func (m *GetByUsernameData) String() string { return proto.CompactTextString(m) }
+func (*GetByUsernameData) ProtoMessage()    {}
+func (*GetByUsernameData) Descriptor() ([]byte, []int) {
 	return fileDescriptor_37757815a5c2e68a, []int{1}
 }
 
-func (m *GetByUsernameOutput) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GetByUsernameOutput.Unmarshal(m, b)
+func (m *GetByUsernameData) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetByUsernameData.Unmarshal(m, b)
 }
-func (m *GetByUsernameOutput) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GetByUsernameOutput.Marshal(b, m, deterministic)
+func (m *GetByUsernameData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetByUsernameData.Marshal(b, m, deterministic)
 }
-func (m *GetByUsernameOutput) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetByUsernameOutput.Merge(m, src)
+func (m *GetByUsernameData) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetByUsernameData.Merge(m, src)
 }
-func (m *GetByUsernameOutput) XXX_Size() int {
-	return xxx_messageInfo_GetByUsernameOutput.Size(m)
+func (m *GetByUsernameData) XXX_Size() int {
+	return xxx_messageInfo_GetByUsernameData.Size(m)
 }
-func (m *GetByUsernameOutput) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetByUsernameOutput.DiscardUnknown(m)
+func (m *GetByUsernameData) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetByUsernameData.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_GetByUsernameOutput proto.InternalMessageInfo
+var xxx_messageInfo_GetByUsernameData proto.InternalMessageInfo
 
-func (m *GetByUsernameOutput) GetUsername() string {
+func (m *GetByUsernameData) GetUsername() string {
 	if m != nil {
 		return m.Username
 	}
@@ -101,11 +101,11 @@ func (m *GetByUsernameOutput) GetUsername() string {
 }
 
 type GetByUsernameReply struct {
-	Data                 *GetByUsernameOutput `protobuf:"bytes,1,opt,name=Data,proto3" json:"Data,omitempty"`
-	Error                string               `protobuf:"bytes,2,opt,name=Error,proto3" json:"Error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
-	XXX_unrecognized     []byte               `json:"-"`
-	XXX_sizecache        int32                `json:"-"`
+	Data                 *GetByUsernameData `protobuf:"bytes,1,opt,name=Data,proto3" json:"Data,omitempty"`
+	Error                string             `protobuf:"bytes,2,opt,name=Error,proto3" json:"Error,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
+	XXX_unrecognized     []byte             `json:"-"`
+	XXX_sizecache        int32              `json:"-"`
 }
 
 func (m *GetByUsernameReply) Reset()         { *m = GetByUsernameReply{} }
@@ -133,7 +133,7 @@ func (m *GetByUsernameReply) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetByUsernameReply proto.InternalMessageInfo
 
-func (m *GetByUsernameReply) GetData() *GetByUsernameOutput {
+func (m *GetByUsernameReply) GetData() *GetByUsernameData {
 	if m != nil {
 		return m.Data
 	}
@@ -149,25 +149,25 @@ func (m *GetByUsernameReply) GetError() string {
 
 func init() {
 	proto.RegisterType((*GetByUsernameRequest)(nil), "pb.GetByUsernameRequest")
-	proto.RegisterType((*GetByUsernameOutput)(nil), "pb.GetByUsernameOutput")
+	proto.RegisterType((*GetByUsernameData)(nil), "pb.GetByUsernameData")
 	proto.RegisterType((*GetByUsernameReply)(nil), "pb.GetByUsernameReply")
 }
 
 func init() { proto.RegisterFile("user_api.proto", fileDescriptor_37757815a5c2e68a) }
 
 var fileDescriptor_37757815a5c2e68a = []byte{
-	// 176 bytes of a gzipped FileDescriptorProto
+	// 173 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x2b, 0x2d, 0x4e, 0x2d,
 	0x8a, 0x4f, 0x2c, 0xc8, 0xd4, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0x2a, 0x48, 0x52, 0x32,
 	0xe2, 0x12, 0x71, 0x4f, 0x2d, 0x71, 0xaa, 0x0c, 0x2d, 0x4e, 0x2d, 0xca, 0x4b, 0xcc, 0x4d, 0x0d,
 	0x4a, 0x2d, 0x2c, 0x4d, 0x2d, 0x2e, 0x11, 0x92, 0xe2, 0xe2, 0x80, 0x09, 0x49, 0x30, 0x2a, 0x30,
-	0x6a, 0x70, 0x06, 0xc1, 0xf9, 0x4a, 0x86, 0x5c, 0xc2, 0x28, 0x7a, 0xfc, 0x4b, 0x4b, 0x0a, 0x4a,
-	0xf1, 0x6b, 0x09, 0xe7, 0x12, 0x42, 0xb3, 0xa6, 0x20, 0xa7, 0x52, 0x48, 0x9b, 0x8b, 0xc5, 0x25,
-	0xb1, 0x24, 0x11, 0xac, 0x9a, 0xdb, 0x48, 0x5c, 0xaf, 0x20, 0x49, 0x0f, 0x8b, 0xc1, 0x41, 0x60,
-	0x45, 0x42, 0x22, 0x5c, 0xac, 0xae, 0x45, 0x45, 0xf9, 0x45, 0x12, 0x4c, 0x60, 0xb3, 0x21, 0x1c,
-	0x23, 0x1f, 0x2e, 0x76, 0x90, 0x6a, 0xc7, 0x82, 0x4c, 0x21, 0x47, 0x2e, 0x5e, 0x14, 0xdd, 0x42,
-	0x12, 0x18, 0x06, 0x42, 0x7d, 0x27, 0x25, 0x86, 0x45, 0xa6, 0x20, 0xa7, 0x32, 0x89, 0x0d, 0x1c,
-	0x30, 0xc6, 0x80, 0x00, 0x00, 0x00, 0xff, 0xff, 0xe2, 0x1e, 0x99, 0x43, 0x2a, 0x01, 0x00, 0x00,
+	0x6a, 0x70, 0x06, 0xc1, 0xf9, 0x4a, 0xfa, 0x5c, 0x82, 0x28, 0x7a, 0x5c, 0x12, 0x4b, 0x12, 0xf1,
+	0x6a, 0x08, 0xe5, 0x12, 0x42, 0xb3, 0xa4, 0x20, 0xa7, 0x52, 0x48, 0x93, 0x8b, 0x05, 0xa4, 0x13,
+	0xac, 0x9a, 0xdb, 0x48, 0x54, 0xaf, 0x20, 0x49, 0x0f, 0xc3, 0xd8, 0x20, 0xb0, 0x12, 0x21, 0x11,
+	0x2e, 0x56, 0xd7, 0xa2, 0xa2, 0xfc, 0x22, 0x09, 0x26, 0xb0, 0xc9, 0x10, 0x8e, 0x91, 0x0f, 0x17,
+	0x3b, 0x48, 0xad, 0x63, 0x41, 0xa6, 0x90, 0x23, 0x17, 0x2f, 0x8a, 0x5e, 0x21, 0x09, 0x0c, 0xe3,
+	0xa0, 0x3e, 0x93, 0x12, 0xc3, 0x22, 0x53, 0x90, 0x53, 0x99, 0xc4, 0x06, 0x0e, 0x14, 0x63, 0x40,
+	0x00, 0x00, 0x00, 0xff, 0xff, 0x37, 0xd3, 0x74, 0x07, 0x26, 0x01, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.

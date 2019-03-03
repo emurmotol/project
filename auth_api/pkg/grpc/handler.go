@@ -29,7 +29,7 @@ func encodeLoginResponse(_ context.Context, r interface{}) (interface{}, error) 
 		return nil, res.Err
 	}
 	d := res.Data
-	data := &pb.LoginOutput{
+	data := &pb.LoginData{
 		AccessToken: d.AccessToken,
 		TokenType:   d.TokenType,
 		ExpiresAt:   d.ExpiresAt,
@@ -64,7 +64,7 @@ func encodeRestrictedResponse(_ context.Context, r interface{}) (interface{}, er
 		return nil, res.Err
 	}
 	c := res.Data.Claims
-	data := &pb.RestrictedOutput{
+	data := &pb.RestrictedData{
 		Claims: &pb.Claims{
 			Audience:  c.Audience,
 			ExpiresAt: c.ExpiresAt,

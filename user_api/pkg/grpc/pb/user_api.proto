@@ -13,12 +13,12 @@ message GetByUsernameRequest {
     string Username = 1;
 }
 
-message GetByUsernameOutput {
+message GetByUsernameData {
     string Username = 1;
    }
    
    message GetByUsernameReply {
-    GetByUsernameOutput Data  = 1;
+    GetByUsernameData Data  = 1;
     string      Error = 2;
    }
 
