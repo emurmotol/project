@@ -60,7 +60,7 @@ Run tests
 make test
 ```
 
-Generated a service
+Generated with
 ```bash
 # create a new service
 kit new service service_name
