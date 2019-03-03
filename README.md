@@ -4,28 +4,39 @@ This is the Mono Repo Project
 
 ## Getting Started
 
-- [Configuration](#configuration)
 - [Dependencies](#dependencies)
+- [Configuration](#configuration)
 - [Services](#services)
 - [Usage](#usage)
 - [Postman Collection](#postman-collection)
 - [Donations](#donations)
 
-## Configuration
-
-- TODO: todo
-
 ## Dependencies
 
-Download and install: https://github.com/protocolbuffers/protobuf/releases
-```bash
-TODO
-```
+Requirements
+- [Go](https://golang.org/dl/)
+- [Docker](https://www.docker.com/get-started)
+- [protobuf](https://github.com/protocolbuffers/protobuf/releases)
+
+Installable via Makefile
+- [gRPC-Go](https://github.com/grpc/grpc-go)
+- [protoc-gen-go](https://github.com/golang/protobuf/tree/master/protoc-gen-go)
+- [GoKit](https://gokit.io/)
+- [GoKit CLI](https://github.com/kujtimiihoxha/kit)
+- [gqlgen](https://github.com/99designs/gqlgen)
+- [dataloaden](github.com/vektah/dataloaden)
+- [postgres](https://www.postgresql.org/)
+- [redis](https://redis.io/)
+
+## Configuration
+
+- GO111MODULE=on
 
 ## Services
 
-- [Auth API](https://github.com/emurmotol/project/tree/master/auth_api)
-- [User API](https://github.com/emurmotol/project/tree/master/user_api)
+- [API](https://github.com/emurmotol/project/tree/master/api) - API Microservice (GraphQL)
+- [Auth API](https://github.com/emurmotol/project/tree/master/auth_api) - Authentication Microservice
+- [User API](https://github.com/emurmotol/project/tree/master/user_api) - User Management Microservice
 
 ## Usage
 
@@ -33,7 +44,7 @@ A Makefile is included for convenience
 
 Install the dependencies
 ```bash
-make
+make install
 ```
 
 Build the binaries

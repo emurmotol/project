@@ -13,24 +13,24 @@ import (
 
 // AuthApiService describes the service.
 type AuthApiService interface {
-	Login(ctx context.Context, username string, password string) (data *LoginOutput, err error)
-	Restricted(ctx context.Context) (data *RestrictedOutput, err error)
+	Login(ctx context.Context, username string, password string) (data *LoginData, err error)
+	Restricted(ctx context.Context) (data *RestrictedData, err error)
 	HealthCheck(ctx context.Context) (status string, err error)
 }
 
-type LoginOutput struct {
+type LoginData struct {
 	AccessToken string `json:"access_token"`
 	TokenType   string `json:"token_type"`
 	ExpiresAt   int64  `json:"expires_at"`
 }
 
-type RestrictedOutput struct {
+type RestrictedData struct {
 	Claims *utils.JWTClaims `json:"claims"`
 }
 
 type basicAuthApiService struct{}
 
-func (b *basicAuthApiService) Login(ctx context.Context, username string, password string) (data *LoginOutput, err error) {
+func (b *basicAuthApiService) Login(ctx context.Context, username string, password string) (data *LoginData, err error) {
 	userID := int64(1234567890)
 	now := time.Now()
 	expiresAt := now.Local().Add(time.Second * viper.GetDuration("JWT_EXPIRES_IN_SECONDS")).Unix()
@@ -51,7 +51,7 @@ func (b *basicAuthApiService) Login(ctx context.Context, username string, passwo
 		return nil, err
 	}
 
-	data = &LoginOutput{
+	data = &LoginData{
 		AccessToken: token,
 		TokenType:   viper.GetString("JWT_TOKEN_TYPE"),
 		ExpiresAt:   expiresAt,
@@ -73,12 +73,12 @@ func New(middleware []Middleware) AuthApiService {
 	return svc
 }
 
-func (b *basicAuthApiService) Restricted(ctx context.Context) (data *RestrictedOutput, err error) {
+func (b *basicAuthApiService) Restricted(ctx context.Context) (data *RestrictedData, err error) {
 	claims, ok := ctx.Value(jwt.JWTClaimsContextKey).(*utils.JWTClaims)
 	if !ok {
 		return nil, errors.New("claims not ok")
 	}
-	return &RestrictedOutput{Claims: claims}, nil
+	return &RestrictedData{Claims: claims}, nil
 }
 
 func (b *basicAuthApiService) HealthCheck(ctx context.Context) (status string, err error) {

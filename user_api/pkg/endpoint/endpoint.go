@@ -14,8 +14,8 @@ type GetByUsernameRequest struct {
 
 // GetByUsernameResponse collects the response parameters for the GetByUsername method.
 type GetByUsernameResponse struct {
-	Data *service.GetByUsernameOutput `json:"data"`
-	Err  error                        `json:"err"`
+	Data *service.GetByUsernameData `json:"data"`
+	Err  error                        `json:"error"`
 }
 
 // MakeGetByUsernameEndpoint returns an endpoint that invokes GetByUsername on the service.
@@ -43,7 +43,7 @@ type Failure interface {
 }
 
 // GetByUsername implements Service. Primarily useful in a client.
-func (e Endpoints) GetByUsername(ctx context.Context, username string) (data *service.GetByUsernameOutput, err error) {
+func (e Endpoints) GetByUsername(ctx context.Context, username string) (data *service.GetByUsernameData, err error) {
 	request := GetByUsernameRequest{Username: username}
 	response, err := e.GetByUsernameEndpoint(ctx, request)
 	if err != nil {

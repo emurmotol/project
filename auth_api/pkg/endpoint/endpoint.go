@@ -15,7 +15,7 @@ type LoginRequest struct {
 
 // LoginResponse collects the response parameters for the Login method.
 type LoginResponse struct {
-	Data *service.LoginOutput `json:"data"`
+	Data *service.LoginData `json:"data"`
 	Err  error                `json:"error"`
 }
 
@@ -44,7 +44,7 @@ type Failure interface {
 }
 
 // Login implements Service. Primarily useful in a client.
-func (e Endpoints) Login(ctx context.Context, username string, password string) (data *service.LoginOutput, err error) {
+func (e Endpoints) Login(ctx context.Context, username string, password string) (data *service.LoginData, err error) {
 	request := LoginRequest{Username: username, Password: password}
 	response, err := e.LoginEndpoint(ctx, request)
 	if err != nil {
@@ -58,7 +58,7 @@ type RestrictedRequest struct{}
 
 // RestrictedResponse collects the response parameters for the Restricted method.
 type RestrictedResponse struct {
-	Data *service.RestrictedOutput `json:"data"`
+	Data *service.RestrictedData `json:"data"`
 	Err  error                     `json:"error"`
 }
 

@@ -1,0 +1,30 @@
+version: "2"
+services:
+  postgres:
+    restart: always
+    volumes:
+    - ./postgres/data:/var/lib/postgresql/data
+    image: postgres
+    container_name: postgres
+    ports:
+    - 5432:5432
+    environment:
+    - POSTGRES_USER=root
+    - POSTGRES_PASSWORD=postgres
+    - POSTGRES_DB=project
+  adminer:
+    restart: always
+    image: adminer
+    container_name: adminer
+    depends_on:
+    - postgres
+    ports:
+    - 8000:8080
+  redis:
+    restart: always
+    volumes:
+    - ./redis/data:/data
+    image: redis
+    container_name: redis
+    ports:
+    - 6379:6379

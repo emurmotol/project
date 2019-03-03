@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 
 	log "github.com/go-kit/kit/log"
 )
@@ -23,9 +24,9 @@ func LoggingMiddleware(logger log.Logger) Middleware {
 
 }
 
-func (l loggingMiddleware) GetByUsername(ctx context.Context, username string) (data *GetByUsernameOutput, err error) {
+func (l loggingMiddleware) GetByUsername(ctx context.Context, username string) (data *GetByUsernameData, err error) {
 	defer func() {
-		l.logger.Log("method", "GetByUsername", "username", username, "data", data, "err", err)
+		l.logger.Log("method", "GetByUsername", "username", username, "data", fmt.Sprint(data), "err", err)
 	}()
 	return l.next.GetByUsername(ctx, username)
 }

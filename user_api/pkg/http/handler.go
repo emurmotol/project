@@ -7,6 +7,7 @@ import (
 	http1 "net/http"
 
 	endpoint "github.com/emurmotol/project/user_api/pkg/endpoint"
+	"github.com/go-kit/kit/auth/jwt"
 	http "github.com/go-kit/kit/transport/http"
 	handlers "github.com/gorilla/handlers"
 	mux "github.com/gorilla/mux"
@@ -14,6 +15,7 @@ import (
 
 // makeGetByUsernameHandler creates the handler logic
 func makeGetByUsernameHandler(m *mux.Router, endpoints endpoint.Endpoints, options []http.ServerOption) {
+	options = append(options, http.ServerBefore(jwt.HTTPToContext()))
 	m.Methods("GET").Path("/username/{username}").Handler(handlers.CORS(handlers.AllowedMethods([]string{"GET"}), handlers.AllowedOrigins([]string{"*"}))(http.NewServer(endpoints.GetByUsernameEndpoint, decodeGetByUsernameRequest, encodeGetByUsernameResponse, options...)))
 }
 
@@ -36,6 +38,7 @@ func encodeGetByUsernameResponse(ctx context.Context, w http1.ResponseWriter, re
 	return
 }
 func ErrorEncoder(_ context.Context, err error, w http1.ResponseWriter) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(err2code(err))
 	json.NewEncoder(w).Encode(errorWrapper{Error: err.Error()})
 }
@@ -50,6 +53,15 @@ func ErrorDecoder(r *http1.Response) error {
 // This is used to set the http status, see an example here :
 // https://github.com/go-kit/kit/blob/master/examples/addsvc/pkg/addtransport/http.go#L133
 func err2code(err error) int {
+	switch err {
+	case jwt.ErrTokenContextMissing,
+		jwt.ErrTokenInvalid,
+		jwt.ErrTokenExpired,
+		jwt.ErrTokenMalformed,
+		jwt.ErrTokenNotActive,
+		jwt.ErrUnexpectedSigningMethod:
+		return http1.StatusBadRequest
+	}
 	return http1.StatusInternalServerError
 }
 

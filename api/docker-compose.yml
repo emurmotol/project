@@ -1,0 +1,12 @@
+version: "2"
+services:
+  api:
+    build:
+      context: .
+    restart: always
+    volumes:
+    - .:/go/src/github.com/emurmotol/project/api
+    image: emurmotol/api:latest
+    container_name: api
+    ports:
+    - 8080:8080

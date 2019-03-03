@@ -28,7 +28,7 @@ func encodeGetByUsernameResponse(_ context.Context, r interface{}) (interface{},
 	if res.Err != nil {
 		return nil, res.Err
 	}
-	data := &pb.GetByUsernameOutput{Username: res.Data.Username}
+	data := &pb.GetByUsernameData{Username: res.Data.Username}
 	return &pb.GetByUsernameReply{Data: data, Error: ""}, nil
 }
 func (g *grpcServer) GetByUsername(ctx context1.Context, req *pb.GetByUsernameRequest) (*pb.GetByUsernameReply, error) {
