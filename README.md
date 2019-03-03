@@ -26,6 +26,7 @@ TODO
 
 - [Auth API](https://github.com/emurmotol/project/tree/master/auth_api)
 - [User API](https://github.com/emurmotol/project/tree/master/user_api)
+- [API](https://github.com/emurmotol/project/tree/master/api)
 
 ## Usage
 
@@ -33,7 +34,7 @@ A Makefile is included for convenience
 
 Install the dependencies
 ```bash
-make
+make install
 ```
 
 Build the binaries

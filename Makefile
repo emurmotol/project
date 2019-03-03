@@ -17,6 +17,8 @@ install: jwt-certs
 	export GO111MODULE=off; go get -v github.com/golang/protobuf/protoc-gen-go
 	export GO111MODULE=on; go get -v github.com/go-kit/kit
 	export GO111MODULE=off; go get -v github.com/kujtimiihoxha/kit
+	export GO111MODULE=off; go get -v github.com/99designs/gqlgen/cmd
+	export GO111MODULE=off; go get -v github.com/vektah/dataloaden
 
 .PHONY: proto
 proto:
@@ -27,6 +29,7 @@ proto:
 build: cp-jwt-certs proto 
 	go build -o ./auth_api/auth_api ./auth_api/cmd
 	go build -o ./user_api/user_api ./user_api/cmd
+	go build -o ./api/api ./api/server
 
 .PHONY: test
 test:
@@ -36,6 +39,7 @@ test:
 docker:
 	docker build ./auth_api -t emurmotol/auth_api:latest
 	docker build ./user_api -t emurmotol/user_api:latest
+	docker build ./api -t emurmotol/api:latest
 
 .PHONY: auth_api
 auth_api:
@@ -44,3 +48,7 @@ auth_api:
 .PHONY: user_api
 user_api:
 	docker-compose -f ./user_api/docker-compose.yml up user_api
+
+.PHONY: api
+api:
+	docker-compose -f ./api/docker-compose.yml up api
