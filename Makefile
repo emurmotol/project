@@ -34,7 +34,10 @@ docker:
 	docker build ./auth_api -t emurmotol/auth_api:latest
 	docker build ./user_api -t emurmotol/user_api:latest
 
-.PHONY: docker-compose
-docker-compose:
+.PHONY: auth_api
+auth_api:
 	docker-compose -f ./auth_api/docker-compose.yml up auth_api
+
+.PHONY: user_api
+user_api:
 	docker-compose -f ./user_api/docker-compose.yml up user_api

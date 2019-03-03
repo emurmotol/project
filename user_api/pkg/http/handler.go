@@ -20,7 +20,7 @@ func makeGetByUsernameHandler(m *mux.Router, endpoints endpoint.Endpoints, optio
 // decodeGetByUsernameRequest is a transport/http.DecodeRequestFunc that decodes a
 // JSON-encoded request from the HTTP request body.
 func decodeGetByUsernameRequest(_ context.Context, r *http1.Request) (interface{}, error) {
-	req := endpoint.GetByUsernameRequest{}
+	req := endpoint.GetByUsernameRequest{Username: mux.Vars(r)["username"]}
 	return req, nil
 }
 

@@ -51,9 +51,9 @@ Build the docker images
 make docker
 ```
 
-Start the services
+Start a service
 ```bash
-make docker-compose
+make service_name
 ```
 
 Run tests
