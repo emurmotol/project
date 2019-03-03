@@ -1,19 +1,22 @@
 # GOPATH:=$(shell go env GOPATH)
 
-.PHONY: install
-install:
-	export GO111MODULE=off; go get -v google.golang.org/grpc
-	export GO111MODULE=off; go get -v github.com/golang/protobuf/protoc-gen-go
-	export GO111MODULE=on; go get -v github.com/go-kit/kit
-	export GO111MODULE=off; go get -v github.com/kujtimiihoxha/kit
-
 .PHONY: jwt-certs
 jwt-certs:
 	openssl genrsa | openssl pkcs8 -topk8 -v2 aes-128-ecb -out ./auth_api/certs/jwt.p8 -passout pass:
 	openssl pkcs8 -in ./auth_api/certs/jwt.p8 -out ./auth_api/certs/jwt.pem -passin pass:
 	openssl rsa -in ./auth_api/certs/jwt.pem -out ./auth_api/certs/jwt.key
 	openssl rsa -in ./auth_api/certs/jwt.key -pubout -out ./auth_api/certs/jwt.key.pub
+
+.PHONY: cp-jwt-certs
+cp-jwt-certs:
 	cp ./auth_api/certs/jwt.key.pub ./user_api/certs
+
+.PHONY: install
+install: jwt-certs
+	export GO111MODULE=off; go get -v google.golang.org/grpc
+	export GO111MODULE=off; go get -v github.com/golang/protobuf/protoc-gen-go
+	export GO111MODULE=on; go get -v github.com/go-kit/kit
+	export GO111MODULE=off; go get -v github.com/kujtimiihoxha/kit
 
 .PHONY: proto
 proto:
@@ -21,7 +24,7 @@ proto:
 	./user_api/pkg/grpc/pb/compile.sh
 
 .PHONY: build
-build: jwt-certs proto 
+build: cp-jwt-certs proto 
 	go build -o ./auth_api/auth_api ./auth_api/cmd
 	go build -o ./user_api/user_api ./user_api/cmd
 

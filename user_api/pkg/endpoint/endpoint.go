@@ -15,7 +15,7 @@ type GetByUsernameRequest struct {
 // GetByUsernameResponse collects the response parameters for the GetByUsername method.
 type GetByUsernameResponse struct {
 	Data *service.GetByUsernameOutput `json:"data"`
-	Err  error                        `json:"err"`
+	Err  error                        `json:"error"`
 }
 
 // MakeGetByUsernameEndpoint returns an endpoint that invokes GetByUsername on the service.
