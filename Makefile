@@ -1,4 +1,4 @@
-# GOPATH:=$(shell go env GOPATH)
+GOPATH:=$(shell go env GOPATH)
 
 .PHONY: jwt-certs
 jwt-certs:
@@ -22,8 +22,8 @@ install: jwt-certs
 
 .PHONY: proto
 proto:
-	./auth_api/pkg/grpc/pb/compile.sh
-	./user_api/pkg/grpc/pb/compile.sh
+	cd ${GOPATH}/src/github.com/emurmotol/project/auth_api/pkg/grpc/pb; ./compile.sh
+	cd ${GOPATH}/src/github.com/emurmotol/project/user_api/pkg/grpc/pb; ./compile.sh
 
 .PHONY: build
 build: cp-jwt-certs proto 

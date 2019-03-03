@@ -17,5 +17,5 @@
 # See also
 #  https://github.com/grpc/grpc-go/tree/master/examples
 
-# protoc auth_api.proto --go_out=plugins=grpc:.
-protoc auth_api/pkg/grpc/pb/auth_api.proto --go_out=plugins=grpc:.
+protoc auth_api.proto --go_out=plugins=grpc:.
+protoc auth_api.proto --go_out=plugins=grpc:../../../../api/pb
