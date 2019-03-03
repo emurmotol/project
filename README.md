@@ -26,6 +26,7 @@ Installable via Makefile
 - [gqlgen](https://github.com/99designs/gqlgen)
 - [dataloaden](github.com/vektah/dataloaden)
 - [postgres](https://www.postgresql.org/)
+- [redis](https://redis.io/)
 
 ## Configuration
 
