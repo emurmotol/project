@@ -13,7 +13,7 @@ This is the Mono Repo Project
 
 ## Dependencies
 
-Manually install
+Requirements
 - [Go](https://golang.org/dl/)
 - [Docker](https://www.docker.com/get-started)
 - [protobuf](https://github.com/protocolbuffers/protobuf/releases)
