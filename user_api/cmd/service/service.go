@@ -137,6 +137,9 @@ func getEndpointMiddleware(logger log.Logger) (mw map[string][]endpoint1.Middlew
 	}
 	jwtParserMiddleware := jwt.NewParser(keyFunc, stdjwt.SigningMethodRS256, newClaims)
 	mw["EndpointName"] = append(mw["EndpointName"], jwtParserMiddleware)
+
+	// postgres middleware
+	addEndpointMiddlewareToAllMethods(mw, endpoint.PostgresMiddleware())
 	return
 }
 func initMetricsEndpoint(g *group.Group) {
