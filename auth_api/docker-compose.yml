@@ -9,8 +9,8 @@ services:
     image: emurmotol/auth_api:latest
     container_name: auth_api
     ports:
-    - 8081:8081
-    - 8082:8082
+    - 8084:8081
+    - 8085:8082
     environment:
     - JWT_PRIVATE_KEY=/go/src/github.com/emurmotol/project/auth_api/certs/jwt.key
     - JWT_PUBLIC_KEY=/go/src/github.com/emurmotol/project/auth_api/certs/jwt.key.pub

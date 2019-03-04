@@ -2,3 +2,4 @@ vendor
 certs/*
 !certs/.keep
 user_api
+go.sum
