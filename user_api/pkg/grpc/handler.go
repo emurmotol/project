@@ -23,8 +23,14 @@ func encodeGetByUsernameResponse(_ context.Context, r interface{}) (interface{},
 	if res.Err != nil {
 		return nil, res.Err
 	}
-	data := &pb.GetByUsernameData{Username: res.Data.Username}
-	return &pb.GetByUsernameReply{Data: data, Error: ""}, nil
+	user := &pb.User{
+		ID:       res.User.ID,
+		Username: res.User.Username,
+		Email:    res.User.Email,
+		Password: res.User.Password,
+		Role:     res.User.Role,
+	}
+	return &pb.GetByUsernameReply{User: user, Error: ""}, nil
 }
 func (g *grpcServer) GetByUsername(ctx context1.Context, req *pb.GetByUsernameRequest) (*pb.GetByUsernameReply, error) {
 	_, rep, err := g.getByUsername.ServeGRPC(ctx, req)
@@ -53,16 +59,14 @@ func encodeCreateUserResponse(_ context.Context, r interface{}) (interface{}, er
 	if res.Err != nil {
 		return nil, res.Err
 	}
-	data := &pb.CreateUserData{
-		User: &pb.User{
-			ID:       res.Data.User.ID,
-			Username: res.Data.User.Username,
-			Email:    res.Data.User.Email,
-			Password: res.Data.User.Password,
-			Role:     res.Data.User.Role,
-		},
+	user := &pb.User{
+		ID:       res.User.ID,
+		Username: res.User.Username,
+		Email:    res.User.Email,
+		Password: res.User.Password,
+		Role:     res.User.Role,
 	}
-	return &pb.CreateUserReply{Data: data, Error: ""}, nil
+	return &pb.CreateUserReply{User: user, Error: ""}, nil
 }
 func (g *grpcServer) CreateUser(ctx context1.Context, req *pb.CreateUserRequest) (*pb.CreateUserReply, error) {
 	_, rep, err := g.createUser.ServeGRPC(ctx, req)

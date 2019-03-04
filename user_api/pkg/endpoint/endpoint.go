@@ -14,17 +14,17 @@ type GetByUsernameRequest struct {
 
 // GetByUsernameResponse collects the response parameters for the GetByUsername method.
 type GetByUsernameResponse struct {
-	Data *service.GetByUsernameData `json:"data"`
-	Err  error                      `json:"error"`
+	User service.User `json:"user"`
+	Err  error        `json:"error"`
 }
 
 // MakeGetByUsernameEndpoint returns an endpoint that invokes GetByUsername on the service.
 func MakeGetByUsernameEndpoint(s service.UserApiService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(GetByUsernameRequest)
-		data, err := s.GetByUsername(ctx, req.Username)
+		user, err := s.GetByUsername(ctx, req.Username)
 		return GetByUsernameResponse{
-			Data: data,
+			User: user,
 			Err:  err,
 		}, nil
 	}
@@ -43,13 +43,13 @@ type Failure interface {
 }
 
 // GetByUsername implements Service. Primarily useful in a client.
-func (e Endpoints) GetByUsername(ctx context.Context, username string) (data *service.GetByUsernameData, err error) {
+func (e Endpoints) GetByUsername(ctx context.Context, username string) (user service.User, err error) {
 	request := GetByUsernameRequest{Username: username}
 	response, err := e.GetByUsernameEndpoint(ctx, request)
 	if err != nil {
 		return
 	}
-	return response.(GetByUsernameResponse).Data, response.(GetByUsernameResponse).Err
+	return response.(GetByUsernameResponse).User, response.(GetByUsernameResponse).Err
 }
 
 // CreateUserRequest collects the request parameters for the CreateUser method.
@@ -62,17 +62,17 @@ type CreateUserRequest struct {
 
 // CreateUserResponse collects the response parameters for the CreateUser method.
 type CreateUserResponse struct {
-	Data *service.CreateUserData `json:"data"`
-	Err  error                   `json:"error"`
+	User service.User `json:"user"`
+	Err  error        `json:"error"`
 }
 
 // MakeCreateUserEndpoint returns an endpoint that invokes CreateUser on the service.
 func MakeCreateUserEndpoint(s service.UserApiService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(CreateUserRequest)
-		data, err := s.CreateUser(ctx, req.Username, req.Email, req.Password, req.Role)
+		user, err := s.CreateUser(ctx, req.Username, req.Email, req.Password, req.Role)
 		return CreateUserResponse{
-			Data: data,
+			User: user,
 			Err:  err,
 		}, nil
 	}
@@ -84,7 +84,7 @@ func (r CreateUserResponse) Failed() error {
 }
 
 // CreateUser implements Service. Primarily useful in a client.
-func (e Endpoints) CreateUser(ctx context.Context, username string, email string, password string, role string) (data *service.CreateUserData, err error) {
+func (e Endpoints) CreateUser(ctx context.Context, username string, email string, password string, role string) (user service.User, err error) {
 	request := CreateUserRequest{
 		Email:    email,
 		Password: password,
@@ -95,5 +95,5 @@ func (e Endpoints) CreateUser(ctx context.Context, username string, email string
 	if err != nil {
 		return
 	}
-	return response.(CreateUserResponse).Data, response.(CreateUserResponse).Err
+	return response.(CreateUserResponse).User, response.(CreateUserResponse).Err
 }

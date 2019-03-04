@@ -11,12 +11,8 @@ import (
 
 // UserApiService describes the service.
 type UserApiService interface {
-	GetByUsername(ctx context.Context, username string) (data *GetByUsernameData, err error)
-	CreateUser(ctx context.Context, username string, email string, password string, role string) (data *CreateUserData, err error)
-}
-
-type GetByUsernameData struct {
-	Username string `json:"username"`
+	GetByUsername(ctx context.Context, username string) (user User, err error)
+	CreateUser(ctx context.Context, username string, email string, password string, role string) (user User, err error)
 }
 
 type User struct {
@@ -27,16 +23,15 @@ type User struct {
 	Role     string `json:"role"`
 }
 
-type CreateUserData struct {
-	User *User `json:"user"`
-}
-
 type basicUserApiService struct {
 	db *gorm.DB
 }
 
-func (b *basicUserApiService) GetByUsername(ctx context.Context, username string) (data *GetByUsernameData, err error) {
-	return &GetByUsernameData{Username: username}, nil
+func (b *basicUserApiService) GetByUsername(ctx context.Context, username string) (user User, err error) {
+	if err := b.db.Find(&user, User{Username: username}).Error; err != nil {
+		return User{}, err
+	}
+	return user, nil
 }
 
 // NewBasicUserApiService returns a naive, stateless implementation of UserApiService.
@@ -60,18 +55,16 @@ func New(middleware []Middleware) UserApiService {
 	return svc
 }
 
-func (b *basicUserApiService) CreateUser(ctx context.Context, username string, email string, password string, role string) (data *CreateUserData, err error) {
-	user := &User{
+func (b *basicUserApiService) CreateUser(ctx context.Context, username string, email string, password string, role string) (user User, err error) {
+	user = User{
 		Username: username,
 		Email:    email,
 		Password: password,
 		Role:     role,
 	}
 
-	if err := b.db.Create(user).Error; err != nil {
-		return nil, err
+	if err := b.db.Create(&user).Error; err != nil {
+		return User{}, err
 	}
-	return &CreateUserData{
-		User: user,
-	}, nil
+	return user, nil
 }

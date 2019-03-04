@@ -16,15 +16,11 @@ message LoginRequest {
     string Password = 2;
 }
 
-message LoginData {
- string AccessToken = 1;
- string TokenType   = 2;
- int64  ExpiresAt   = 3;
-}
-
 message LoginReply {
- LoginData Data  = 1;
- string      Error = 2;
+    string AccessToken = 1;
+    string TokenType   = 2;
+    int64  ExpiresAt   = 3;
+ string      Error = 4;
 }
 
 message RestrictedRequest {}
@@ -39,13 +35,9 @@ message Claims {
     string	Subject   = 7;
     int64   UserID    = 8;
 }
-   
-message RestrictedData {
-   Claims Claims = 1;
-}
 
 message RestrictedReply {
- RestrictedData Data  = 1;
+    Claims Claims  = 1;
  string Error = 2;
 }
 

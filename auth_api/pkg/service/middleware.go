@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/emurmotol/project/auth_api/pkg/utils"
 	log "github.com/go-kit/kit/log"
 )
 
@@ -24,16 +25,16 @@ func LoggingMiddleware(logger log.Logger) Middleware {
 
 }
 
-func (l loggingMiddleware) Login(ctx context.Context, username string, password string) (data *LoginData, err error) {
+func (l loggingMiddleware) Login(ctx context.Context, username string, password string) (accessToken string, tokenType string, expiresAt int64, err error) {
 	defer func() {
-		l.logger.Log("method", "Login", "username", username, "password", password, "data", fmt.Sprint(data), "err", err)
+		l.logger.Log("method", "Login", "username", username, "password", password, "accessToken", accessToken, "tokenType", tokenType, "expiresAt", expiresAt, "err", err)
 	}()
 	return l.next.Login(ctx, username, password)
 }
 
-func (l loggingMiddleware) Restricted(ctx context.Context) (data *RestrictedData, err error) {
+func (l loggingMiddleware) Restricted(ctx context.Context) (claims *utils.JWTClaims, err error) {
 	defer func() {
-		l.logger.Log("method", "Restricted", "data", fmt.Sprintln(data.Claims), "err", err)
+		l.logger.Log("method", "Restricted", "claims", fmt.Sprintln(claims), "err", err)
 	}()
 	return l.next.Restricted(ctx)
 }

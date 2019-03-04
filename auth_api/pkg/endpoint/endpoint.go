@@ -4,6 +4,7 @@ import (
 	"context"
 
 	service "github.com/emurmotol/project/auth_api/pkg/service"
+	"github.com/emurmotol/project/auth_api/pkg/utils"
 	endpoint "github.com/go-kit/kit/endpoint"
 )
 
@@ -15,18 +16,22 @@ type LoginRequest struct {
 
 // LoginResponse collects the response parameters for the Login method.
 type LoginResponse struct {
-	Data *service.LoginData `json:"data"`
-	Err  error                `json:"error"`
+	AccessToken string `json:"access_token"`
+	TokenType   string `json:"token_type"`
+	ExpiresAt   int64  `json:"expires_at"`
+	Err         error  `json:"error"`
 }
 
 // MakeLoginEndpoint returns an endpoint that invokes Login on the service.
 func MakeLoginEndpoint(s service.AuthApiService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(LoginRequest)
-		data, err := s.Login(ctx, req.Username, req.Password)
+		accessToken, tokenType, expiresAt, err := s.Login(ctx, req.Username, req.Password)
 		return LoginResponse{
-			Data: data,
-			Err:  err,
+			AccessToken: accessToken,
+			TokenType:   tokenType,
+			ExpiresAt:   expiresAt,
+			Err:         err,
 		}, nil
 	}
 }
@@ -44,13 +49,13 @@ type Failure interface {
 }
 
 // Login implements Service. Primarily useful in a client.
-func (e Endpoints) Login(ctx context.Context, username string, password string) (data *service.LoginData, err error) {
+func (e Endpoints) Login(ctx context.Context, username string, password string) (accessToken string, tokenType string, expiresAt int64, err error) {
 	request := LoginRequest{Username: username, Password: password}
 	response, err := e.LoginEndpoint(ctx, request)
 	if err != nil {
 		return
 	}
-	return response.(LoginResponse).Data, response.(LoginResponse).Err
+	return response.(LoginResponse).AccessToken, response.(LoginResponse).TokenType, response.(LoginResponse).ExpiresAt, response.(LoginResponse).Err
 }
 
 // RestrictedRequest collects the request parameters for the Restricted method.
@@ -58,17 +63,17 @@ type RestrictedRequest struct{}
 
 // RestrictedResponse collects the response parameters for the Restricted method.
 type RestrictedResponse struct {
-	Data *service.RestrictedData `json:"data"`
-	Err  error                     `json:"error"`
+	Claims *utils.JWTClaims `json:"claims"`
+	Err    error            `json:"error"`
 }
 
 // MakeRestrictedEndpoint returns an endpoint that invokes Restricted on the service.
 func MakeRestrictedEndpoint(s service.AuthApiService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		data, err := s.Restricted(ctx)
+		claims, err := s.Restricted(ctx)
 		return RestrictedResponse{
-			Data: data,
-			Err:  err,
+			Claims: claims,
+			Err:    err,
 		}, nil
 	}
 }
@@ -79,13 +84,13 @@ func (r RestrictedResponse) Failed() error {
 }
 
 // Restricted implements Service. Primarily useful in a client.
-func (e Endpoints) Restricted(ctx context.Context) (err error) {
+func (e Endpoints) Restricted(ctx context.Context) (claims *utils.JWTClaims, err error) {
 	request := RestrictedRequest{}
 	response, err := e.RestrictedEndpoint(ctx, request)
 	if err != nil {
 		return
 	}
-	return response.(RestrictedResponse).Err
+	return response.(RestrictedResponse).Claims, response.(RestrictedResponse).Err
 }
 
 // HealthCheckRequest collects the request parameters for the HealthCheck method.

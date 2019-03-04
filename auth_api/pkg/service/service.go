@@ -13,27 +13,17 @@ import (
 
 // AuthApiService describes the service.
 type AuthApiService interface {
-	Login(ctx context.Context, username string, password string) (data *LoginData, err error)
-	Restricted(ctx context.Context) (data *RestrictedData, err error)
+	Login(ctx context.Context, username string, password string) (accessToken string, tokenType string, expiresAt int64, err error)
+	Restricted(ctx context.Context) (claims *utils.JWTClaims, err error)
 	HealthCheck(ctx context.Context) (status string, err error)
-}
-
-type LoginData struct {
-	AccessToken string `json:"access_token"`
-	TokenType   string `json:"token_type"`
-	ExpiresAt   int64  `json:"expires_at"`
-}
-
-type RestrictedData struct {
-	Claims *utils.JWTClaims `json:"claims"`
 }
 
 type basicAuthApiService struct{}
 
-func (b *basicAuthApiService) Login(ctx context.Context, username string, password string) (data *LoginData, err error) {
+func (b *basicAuthApiService) Login(ctx context.Context, username string, password string) (accessToken string, tokenType string, expiresAt int64, err error) {
 	userID := int64(1234567890)
 	now := time.Now()
-	expiresAt := now.Local().Add(time.Second * viper.GetDuration("JWT_EXPIRES_IN_SECONDS")).Unix()
+	expiresAt = now.Local().Add(time.Second * viper.GetDuration("JWT_EXPIRES_IN_SECONDS")).Unix()
 	claims := &utils.JWTClaims{
 		userID,
 		stdjwt.StandardClaims{
@@ -48,15 +38,9 @@ func (b *basicAuthApiService) Login(ctx context.Context, username string, passwo
 	}
 	token, err := utils.GenerateJWTToken(claims, viper.GetString("JWT_PRIVATE_KEY"))
 	if err != nil {
-		return nil, err
+		return "", "", int64(0), err
 	}
-
-	data = &LoginData{
-		AccessToken: token,
-		TokenType:   viper.GetString("JWT_TOKEN_TYPE"),
-		ExpiresAt:   expiresAt,
-	}
-	return data, nil
+	return token, viper.GetString("JWT_TOKEN_TYPE"), expiresAt, nil
 }
 
 // NewBasicAuthApiService returns a naive, stateless implementation of AuthApiService.
@@ -73,12 +57,13 @@ func New(middleware []Middleware) AuthApiService {
 	return svc
 }
 
-func (b *basicAuthApiService) Restricted(ctx context.Context) (data *RestrictedData, err error) {
-	claims, ok := ctx.Value(jwt.JWTClaimsContextKey).(*utils.JWTClaims)
+func (b *basicAuthApiService) Restricted(ctx context.Context) (claims *utils.JWTClaims, err error) {
+	ok := false
+	claims, ok = ctx.Value(jwt.JWTClaimsContextKey).(*utils.JWTClaims)
 	if !ok {
 		return nil, errors.New("claims not ok")
 	}
-	return &RestrictedData{Claims: claims}, nil
+	return claims, nil
 }
 
 func (b *basicAuthApiService) HealthCheck(ctx context.Context) (status string, err error) {

@@ -14,12 +14,8 @@ message GetByUsernameRequest {
  string Username = 1;
 }
 
-message GetByUsernameData {
- string Username = 1;
-}
-
 message GetByUsernameReply {
- GetByUsernameData Data  = 1;
+ User User  = 1;
  string            Error = 2;
 }
 
@@ -38,12 +34,8 @@ message User {
     string Role = 5;
 }
 
-message CreateUserData {
-    User User = 1;
-   }
-
 message CreateUserReply {
-    CreateUserData Data  = 1;
+    User User = 1;
     string            Error = 2;
 }
 

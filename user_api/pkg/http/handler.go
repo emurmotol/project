@@ -16,7 +16,7 @@ import (
 // makeGetByUsernameHandler creates the handler logic
 func makeGetByUsernameHandler(m *mux.Router, endpoints endpoint.Endpoints, options []http.ServerOption) {
 	options = append(options, http.ServerBefore(jwt.HTTPToContext()))
-	m.Methods("GET").Path("/username/{username}").Handler(handlers.CORS(handlers.AllowedMethods([]string{"GET"}), handlers.AllowedOrigins([]string{"*"}))(http.NewServer(endpoints.GetByUsernameEndpoint, decodeGetByUsernameRequest, encodeGetByUsernameResponse, options...)))
+	m.Methods("GET").Path("/get-by-username/{username}").Handler(handlers.CORS(handlers.AllowedMethods([]string{"GET"}), handlers.AllowedOrigins([]string{"*"}))(http.NewServer(endpoints.GetByUsernameEndpoint, decodeGetByUsernameRequest, encodeGetByUsernameResponse, options...)))
 }
 
 // decodeGetByUsernameRequest is a transport/http.DecodeRequestFunc that decodes a

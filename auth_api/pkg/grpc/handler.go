@@ -28,13 +28,12 @@ func encodeLoginResponse(_ context.Context, r interface{}) (interface{}, error) 
 	if res.Err != nil {
 		return nil, res.Err
 	}
-	d := res.Data
-	data := &pb.LoginData{
-		AccessToken: d.AccessToken,
-		TokenType:   d.TokenType,
-		ExpiresAt:   d.ExpiresAt,
-	}
-	return &pb.LoginReply{Data: data, Error: ""}, nil
+	return &pb.LoginReply{
+		AccessToken: res.AccessToken,
+		TokenType:   res.TokenType,
+		ExpiresAt:   res.ExpiresAt,
+		Error:       "",
+	}, nil
 }
 func (g *grpcServer) Login(ctx context1.Context, req *pb.LoginRequest) (*pb.LoginReply, error) {
 	_, rep, err := g.login.ServeGRPC(ctx, req)
@@ -63,20 +62,17 @@ func encodeRestrictedResponse(_ context.Context, r interface{}) (interface{}, er
 	if res.Err != nil {
 		return nil, res.Err
 	}
-	c := res.Data.Claims
-	data := &pb.RestrictedData{
-		Claims: &pb.Claims{
-			Audience:  c.Audience,
-			ExpiresAt: c.ExpiresAt,
-			Id:        c.Id,
-			IssuedAt:  c.IssuedAt,
-			Issuer:    c.Issuer,
-			NotBefore: c.NotBefore,
-			Subject:   c.Subject,
-			UserID:    c.UserID,
-		},
+	claims := &pb.Claims{
+		Audience:  res.Claims.Audience,
+		ExpiresAt: res.Claims.ExpiresAt,
+		Id:        res.Claims.Id,
+		IssuedAt:  res.Claims.IssuedAt,
+		Issuer:    res.Claims.Issuer,
+		NotBefore: res.Claims.NotBefore,
+		Subject:   res.Claims.Subject,
+		UserID:    res.Claims.UserID,
 	}
-	return &pb.RestrictedReply{Data: data, Error: ""}, nil
+	return &pb.RestrictedReply{Claims: claims, Error: ""}, nil
 }
 func (g *grpcServer) Restricted(ctx context1.Context, req *pb.RestrictedRequest) (*pb.RestrictedReply, error) {
 	_, rep, err := g.restricted.ServeGRPC(ctx, req)
