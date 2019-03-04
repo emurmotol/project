@@ -34,7 +34,7 @@ func (l loggingMiddleware) Login(ctx context.Context, username string, password 
 
 func (l loggingMiddleware) Restricted(ctx context.Context) (claims *utils.JWTClaims, err error) {
 	defer func() {
-		l.logger.Log("method", "Restricted", "claims", fmt.Sprintln(claims), "err", err)
+		l.logger.Log("method", "Restricted", "claims", fmt.Sprint(claims), "err", err)
 	}()
 	return l.next.Restricted(ctx)
 }
