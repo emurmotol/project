@@ -17,6 +17,7 @@ install: jwt-certs
 	export GO111MODULE=off; go get -v github.com/kujtimiihoxha/kit
 	export GO111MODULE=off; go get -v github.com/99designs/gqlgen/cmd
 	export GO111MODULE=off; go get -v github.com/vektah/dataloaden
+	export GO111MODULE=off; go get -v -tags 'postgres' -u github.com/golang-migrate/migrate/cmd/migrate
 
 .PHONY: proto
 proto:
@@ -33,8 +34,8 @@ build: cp-jwt-certs proto
 test:
 	go test -v ./... -cover
 
-.PHONY: docker
-docker:
+.PHONY: docker-images
+docker-images:
 	docker build ./auth_api -t emurmotol/auth_api:latest
 	docker build ./user_api -t emurmotol/user_api:latest
 	docker build ./api -t emurmotol/api:latest
@@ -56,9 +57,19 @@ down:
 	docker-compose -f ./user_api/docker-compose.yml down
 	docker-compose -f ./auth_api/docker-compose.yml down
 	docker-compose -f ./api/docker-compose.yml down
+	docker-compose -f ./server/docker-compose.yml down
 
 .PHONY: server
 server:
 	mkdir -p ./server/postgres/data
 	mkdir -p ./server/redis/data
 	docker-compose -f ./server/docker-compose.yml up
+
+.PHONY: migrate
+migrate:
+	migrate -verbose -source file://server/postgres/migrations -database postgres://root:postgres@localhost:5433/project?sslmode=disable up
+
+.PHONY: migrate-down
+migrate-down:
+	migrate -verbose -source file://server/postgres/migrations -database postgres://root:postgres@localhost:5433/project?sslmode=disable down
+

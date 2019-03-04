@@ -10,8 +10,12 @@ import (
 // NewGRPCServer makes a set of endpoints available as a gRPC AddServer
 type grpcServer struct {
 	getByUsername grpc.Handler
+	createUser    grpc.Handler
 }
 
 func NewGRPCServer(endpoints endpoint.Endpoints, options map[string][]grpc.ServerOption) pb.UserApiServer {
-	return &grpcServer{getByUsername: makeGetByUsernameHandler(endpoints, options["GetByUsername"])}
+	return &grpcServer{
+		createUser:    makeCreateUserHandler(endpoints, options["CreateUser"]),
+		getByUsername: makeGetByUsernameHandler(endpoints, options["GetByUsername"]),
+	}
 }

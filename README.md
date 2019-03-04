@@ -27,6 +27,7 @@ Installable via Makefile
 - [dataloaden](github.com/vektah/dataloaden)
 - [postgres](https://www.postgresql.org/)
 - [redis](https://redis.io/)
+- [migrate](https://github.com/golang-migrate/migrate/tree/master/cli)
 
 ## Configuration
 
@@ -45,6 +46,11 @@ A Makefile is included for convenience
 Install the dependencies
 ```bash
 make install
+```
+
+Run migrations
+```bash
+make migrate
 ```
 
 Build the binaries
@@ -93,6 +99,11 @@ cd service_name
 go mod init
 
 go mod tidy
+```
+
+Create migration
+```bash
+migrate create -ext sql -dir=./server/postgres/migrations create_sample_table
 ```
 
 ## Postman Collection

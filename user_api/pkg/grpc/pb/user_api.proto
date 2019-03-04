@@ -7,18 +7,43 @@ package pb;
 //The UserApi service definition.
 service UserApi {
  rpc GetByUsername (GetByUsernameRequest) returns (GetByUsernameReply);
+ rpc CreateUser    (CreateUserRequest   ) returns (CreateUserReply   );
 }
 
 message GetByUsernameRequest {
-    string Username = 1;
+ string Username = 1;
 }
 
 message GetByUsernameData {
+ string Username = 1;
+}
+
+message GetByUsernameReply {
+ GetByUsernameData Data  = 1;
+ string            Error = 2;
+}
+
+message CreateUserRequest {
     string Username = 1;
+    string Email = 2;
+    string Password = 3;
+    string Role = 4;
+}
+
+message User {
+    int64 ID = 1;
+    string Username = 2;
+    string Email = 3;
+    string Password = 4;
+    string Role = 5;
+}
+
+message CreateUserData {
+    User User = 1;
    }
-   
-   message GetByUsernameReply {
-    GetByUsernameData Data  = 1;
-    string      Error = 2;
-   }
+
+message CreateUserReply {
+    CreateUserData Data  = 1;
+    string            Error = 2;
+}
 

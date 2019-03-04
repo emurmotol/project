@@ -7,6 +7,9 @@ require (
 	github.com/golang/protobuf v1.3.0
 	github.com/gorilla/handlers v1.4.0
 	github.com/gorilla/mux v1.7.0
+	github.com/jinzhu/gorm v1.9.2
+	github.com/jinzhu/inflection v0.0.0-20180308033659-04140366298a // indirect
+	github.com/lib/pq v1.0.0 // indirect
 	github.com/lightstep/lightstep-tracer-go v0.15.6
 	github.com/oklog/oklog v0.3.2
 	github.com/opentracing/opentracing-go v1.0.2
