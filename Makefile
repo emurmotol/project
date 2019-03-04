@@ -64,3 +64,12 @@ server:
 	mkdir -p ./server/postgres/data
 	mkdir -p ./server/redis/data
 	docker-compose -f ./server/docker-compose.yml up
+
+.PHONY: migrate
+migrate:
+	migrate -verbose -source file://server/postgres/migrations -database postgres://root:postgres@localhost:5433/project?sslmode=disable up
+
+.PHONY: migrate-down
+migrate-down:
+	migrate -verbose -source file://server/postgres/migrations -database postgres://root:postgres@localhost:5433/project?sslmode=disable down
+

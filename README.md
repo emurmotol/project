@@ -48,6 +48,11 @@ Install the dependencies
 make install
 ```
 
+Run migrations
+```bash
+make migrate
+```
+
 Build the binaries
 ```bash
 make build
@@ -94,6 +99,11 @@ cd service_name
 go mod init
 
 go mod tidy
+```
+
+Create migration
+```bash
+migrate create -ext sql -dir=./server/postgres/migrations create_sample_table
 ```
 
 ## Postman Collection
