@@ -33,8 +33,8 @@ build: cp-jwt-certs proto
 test:
 	go test -v ./... -cover
 
-.PHONY: docker
-docker:
+.PHONY: docker-images
+docker-images:
 	docker build ./auth_api -t emurmotol/auth_api:latest
 	docker build ./user_api -t emurmotol/user_api:latest
 	docker build ./api -t emurmotol/api:latest
@@ -56,6 +56,7 @@ down:
 	docker-compose -f ./user_api/docker-compose.yml down
 	docker-compose -f ./auth_api/docker-compose.yml down
 	docker-compose -f ./api/docker-compose.yml down
+	docker-compose -f ./server/docker-compose.yml down
 
 .PHONY: server
 server:
