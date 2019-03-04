@@ -77,7 +77,6 @@ func ConvertClaims(claims *utils.JWTClaims) *pb.Claims {
 		Issuer:    claims.Issuer,
 		NotBefore: claims.NotBefore,
 		Subject:   claims.Subject,
-		UserID:    claims.UserID,
 	}
 }
 

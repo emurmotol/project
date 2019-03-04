@@ -19,19 +19,17 @@ type AuthApiService interface {
 type basicAuthApiService struct{}
 
 func (b *basicAuthApiService) Login(ctx context.Context, username string, password string) (accessToken string, tokenType string, expiresAt int64, err error) {
-	userID := int64(1234567890)
 	now := time.Now()
 	expiresAt = now.Local().Add(time.Second * viper.GetDuration("JWT_EXPIRES_IN_SECONDS")).Unix()
 	claims := &utils.JWTClaims{
-		userID,
-		stdjwt.StandardClaims{
-			Audience:  "AUDIENCE_HERE",
+		StandardClaims: stdjwt.StandardClaims{
+			Audience:  "user_id",
 			ExpiresAt: expiresAt,
-			Id:        "ID_HERE",
+			Id:        "jwt_id",
 			IssuedAt:  now.Unix(),
-			Issuer:    "ISSUER_HERE",
+			Issuer:    "auth_api",
 			NotBefore: 0,
-			Subject:   "SUBJECT_HERE",
+			Subject:   "user_role",
 		},
 	}
 	token, err := utils.GenerateJWTToken(claims, viper.GetString("JWT_PRIVATE_KEY"))

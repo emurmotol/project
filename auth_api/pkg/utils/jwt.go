@@ -23,6 +23,5 @@ func GenerateJWTToken(claims stdjwt.Claims, privateKeyPath string) (string, erro
 }
 
 type JWTClaims struct {
-	UserID int64 `json:"user_id"`
 	stdjwt.StandardClaims
 }
