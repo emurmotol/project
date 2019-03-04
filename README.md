@@ -27,6 +27,7 @@ Installable via Makefile
 - [dataloaden](github.com/vektah/dataloaden)
 - [postgres](https://www.postgresql.org/)
 - [redis](https://redis.io/)
+- [migrate](https://github.com/golang-migrate/migrate/tree/master/cli)
 
 ## Configuration
 
