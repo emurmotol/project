@@ -2,10 +2,8 @@ package service
 
 import (
 	"context"
-	"errors"
 
 	"github.com/emurmotol/project/user_api/pkg/utils"
-	"github.com/jinzhu/gorm"
 )
 
 // UserApiService describes the service.
@@ -25,10 +23,7 @@ type User struct {
 type basicUserApiService struct{}
 
 func (b *basicUserApiService) GetByUsername(ctx context.Context, username string) (user User, err error) {
-	db, ok := ctx.Value(utils.DBContextKey).(*gorm.DB)
-	if !ok {
-		return User{}, errors.New("db not ok")
-	}
+	db := utils.GetDB(ctx)
 
 	if err := db.Find(&user, User{Username: username}).Error; err != nil {
 		return User{}, err
@@ -51,10 +46,7 @@ func New(middleware []Middleware) UserApiService {
 }
 
 func (b *basicUserApiService) CreateUser(ctx context.Context, username string, email string, password string, role string) (user User, err error) {
-	db, ok := ctx.Value(utils.DBContextKey).(*gorm.DB)
-	if !ok {
-		return User{}, errors.New("db not ok")
-	}
+	db := utils.GetDB(ctx)
 
 	user = User{
 		Username: username,
