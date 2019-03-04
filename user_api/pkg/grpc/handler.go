@@ -9,20 +9,15 @@ import (
 	context1 "golang.org/x/net/context"
 )
 
-// makeGetByUsernameHandler creates the handler logic
 func makeGetByUsernameHandler(endpoints endpoint.Endpoints, options []grpc.ServerOption) grpc.Handler {
 	return grpc.NewServer(endpoints.GetByUsernameEndpoint, decodeGetByUsernameRequest, encodeGetByUsernameResponse, options...)
 }
 
-// decodeGetByUsernameResponse is a transport/grpc.DecodeRequestFunc that converts a
-// gRPC request to a user-domain sum request.
 func decodeGetByUsernameRequest(_ context.Context, r interface{}) (interface{}, error) {
 	req := r.(*pb.GetByUsernameRequest)
 	return endpoint.GetByUsernameRequest{Username: req.Username}, nil
 }
 
-// encodeGetByUsernameResponse is a transport/grpc.EncodeResponseFunc that converts
-// a user-domain response to a gRPC reply.
 func encodeGetByUsernameResponse(_ context.Context, r interface{}) (interface{}, error) {
 	res := r.(endpoint.GetByUsernameResponse)
 	if res.Err != nil {
@@ -37,4 +32,42 @@ func (g *grpcServer) GetByUsername(ctx context1.Context, req *pb.GetByUsernameRe
 		return nil, err
 	}
 	return rep.(*pb.GetByUsernameReply), nil
+}
+
+func makeCreateUserHandler(endpoints endpoint.Endpoints, options []grpc.ServerOption) grpc.Handler {
+	return grpc.NewServer(endpoints.CreateUserEndpoint, decodeCreateUserRequest, encodeCreateUserResponse, options...)
+}
+
+func decodeCreateUserRequest(_ context.Context, r interface{}) (interface{}, error) {
+	req := r.(*pb.CreateUserRequest)
+	return endpoint.CreateUserRequest{
+		Username: req.Username,
+		Email:    req.Email,
+		Password: req.Password,
+		Role:     req.Role,
+	}, nil
+}
+
+func encodeCreateUserResponse(_ context.Context, r interface{}) (interface{}, error) {
+	res := r.(endpoint.CreateUserResponse)
+	if res.Err != nil {
+		return nil, res.Err
+	}
+	data := &pb.CreateUserData{
+		User: &pb.User{
+			ID:       res.Data.User.ID,
+			Username: res.Data.User.Username,
+			Email:    res.Data.User.Email,
+			Password: res.Data.User.Password,
+			Role:     res.Data.User.Role,
+		},
+	}
+	return &pb.CreateUserReply{Data: data, Error: ""}, nil
+}
+func (g *grpcServer) CreateUser(ctx context1.Context, req *pb.CreateUserRequest) (*pb.CreateUserReply, error) {
+	_, rep, err := g.createUser.ServeGRPC(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return rep.(*pb.CreateUserReply), nil
 }

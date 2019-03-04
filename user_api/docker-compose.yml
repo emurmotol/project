@@ -13,3 +13,4 @@ services:
     - 8087:8082
     environment:
     - JWT_PUBLIC_KEY=/go/src/github.com/emurmotol/project/user_api/certs/jwt.key.pub
+    - POSTGRES_DATABASE=postgres://root:postgres@192.168.0.33:5433/project?sslmode=disable

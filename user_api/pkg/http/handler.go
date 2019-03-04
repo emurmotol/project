@@ -68,3 +68,28 @@ func err2code(err error) int {
 type errorWrapper struct {
 	Error string `json:"error"`
 }
+
+// makeCreateUserHandler creates the handler logic
+func makeCreateUserHandler(m *mux.Router, endpoints endpoint.Endpoints, options []http.ServerOption) {
+	m.Methods("POST").Path("/create").Handler(handlers.CORS(handlers.AllowedMethods([]string{"POST"}), handlers.AllowedOrigins([]string{"*"}))(http.NewServer(endpoints.CreateUserEndpoint, decodeCreateUserRequest, encodeCreateUserResponse, options...)))
+}
+
+// decodeCreateUserRequest is a transport/http.DecodeRequestFunc that decodes a
+// JSON-encoded request from the HTTP request body.
+func decodeCreateUserRequest(_ context.Context, r *http1.Request) (interface{}, error) {
+	req := endpoint.CreateUserRequest{}
+	err := json.NewDecoder(r.Body).Decode(&req)
+	return req, err
+}
+
+// encodeCreateUserResponse is a transport/http.EncodeResponseFunc that encodes
+// the response as JSON to the response writer
+func encodeCreateUserResponse(ctx context.Context, w http1.ResponseWriter, response interface{}) (err error) {
+	if f, ok := response.(endpoint.Failure); ok && f.Failed() != nil {
+		ErrorEncoder(ctx, f.Failed(), w)
+		return nil
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	err = json.NewEncoder(w).Encode(response)
+	return
+}

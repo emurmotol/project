@@ -11,14 +11,21 @@ import (
 // single parameter.
 type Endpoints struct {
 	GetByUsernameEndpoint endpoint.Endpoint
+	CreateUserEndpoint    endpoint.Endpoint
 }
 
 // New returns a Endpoints struct that wraps the provided service, and wires in all of the
 // expected endpoint middlewares
 func New(s service.UserApiService, mdw map[string][]endpoint.Middleware) Endpoints {
-	eps := Endpoints{GetByUsernameEndpoint: MakeGetByUsernameEndpoint(s)}
+	eps := Endpoints{
+		CreateUserEndpoint:    MakeCreateUserEndpoint(s),
+		GetByUsernameEndpoint: MakeGetByUsernameEndpoint(s),
+	}
 	for _, m := range mdw["GetByUsername"] {
 		eps.GetByUsernameEndpoint = m(eps.GetByUsernameEndpoint)
+	}
+	for _, m := range mdw["CreateUser"] {
+		eps.CreateUserEndpoint = m(eps.CreateUserEndpoint)
 	}
 	return eps
 }
