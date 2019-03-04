@@ -62,17 +62,7 @@ func encodeRestrictedResponse(_ context.Context, r interface{}) (interface{}, er
 	if res.Err != nil {
 		return nil, res.Err
 	}
-	claims := &pb.Claims{
-		Audience:  res.Claims.Audience,
-		ExpiresAt: res.Claims.ExpiresAt,
-		Id:        res.Claims.Id,
-		IssuedAt:  res.Claims.IssuedAt,
-		Issuer:    res.Claims.Issuer,
-		NotBefore: res.Claims.NotBefore,
-		Subject:   res.Claims.Subject,
-		UserID:    res.Claims.UserID,
-	}
-	return &pb.RestrictedReply{Claims: claims, Error: ""}, nil
+	return &pb.RestrictedReply{Claims: endpoint.ConvertClaims(res.Claims), Error: ""}, nil
 }
 func (g *grpcServer) Restricted(ctx context1.Context, req *pb.RestrictedRequest) (*pb.RestrictedReply, error) {
 	_, rep, err := g.restricted.ServeGRPC(ctx, req)

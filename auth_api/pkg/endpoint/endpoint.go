@@ -3,6 +3,7 @@ package endpoint
 import (
 	"context"
 
+	"github.com/emurmotol/project/auth_api/pkg/grpc/pb"
 	service "github.com/emurmotol/project/auth_api/pkg/service"
 	"github.com/emurmotol/project/auth_api/pkg/utils"
 	endpoint "github.com/go-kit/kit/endpoint"
@@ -65,6 +66,19 @@ type RestrictedRequest struct{}
 type RestrictedResponse struct {
 	Claims *utils.JWTClaims `json:"claims"`
 	Err    error            `json:"error"`
+}
+
+func ConvertClaims(claims *utils.JWTClaims) *pb.Claims {
+	return &pb.Claims{
+		Audience:  claims.Audience,
+		ExpiresAt: claims.ExpiresAt,
+		Id:        claims.Id,
+		IssuedAt:  claims.IssuedAt,
+		Issuer:    claims.Issuer,
+		NotBefore: claims.NotBefore,
+		Subject:   claims.Subject,
+		UserID:    claims.UserID,
+	}
 }
 
 // MakeRestrictedEndpoint returns an endpoint that invokes Restricted on the service.

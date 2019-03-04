@@ -3,6 +3,7 @@ package endpoint
 import (
 	"context"
 
+	"github.com/emurmotol/project/user_api/pkg/grpc/pb"
 	service "github.com/emurmotol/project/user_api/pkg/service"
 	endpoint "github.com/go-kit/kit/endpoint"
 )
@@ -16,6 +17,16 @@ type GetByUsernameRequest struct {
 type GetByUsernameResponse struct {
 	User service.User `json:"user"`
 	Err  error        `json:"error"`
+}
+
+func ConvertUser(user service.User) *pb.User {
+	return &pb.User{
+		ID:       user.ID,
+		Username: user.Username,
+		Email:    user.Email,
+		Password: user.Password,
+		Role:     user.Role,
+	}
 }
 
 // MakeGetByUsernameEndpoint returns an endpoint that invokes GetByUsername on the service.
