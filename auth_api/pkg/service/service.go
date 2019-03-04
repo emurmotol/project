@@ -2,12 +2,10 @@ package service
 
 import (
 	"context"
-	"errors"
 	"time"
 
 	stdjwt "github.com/dgrijalva/jwt-go"
 	"github.com/emurmotol/project/auth_api/pkg/utils"
-	"github.com/go-kit/kit/auth/jwt"
 	"github.com/spf13/viper"
 )
 
@@ -58,12 +56,7 @@ func New(middleware []Middleware) AuthApiService {
 }
 
 func (b *basicAuthApiService) Restricted(ctx context.Context) (claims *utils.JWTClaims, err error) {
-	ok := false
-	claims, ok = ctx.Value(jwt.JWTClaimsContextKey).(*utils.JWTClaims)
-	if !ok {
-		return nil, errors.New("claims not ok")
-	}
-	return claims, nil
+	return utils.GetClaims(ctx), nil
 }
 
 func (b *basicAuthApiService) HealthCheck(ctx context.Context) (status string, err error) {
