@@ -41,15 +41,21 @@ docker:
 
 .PHONY: auth_api
 auth_api:
-	docker-compose -f ./auth_api/docker-compose.yml up auth_api
+	docker-compose -f ./auth_api/docker-compose.yml up
 
 .PHONY: user_api
 user_api:
-	docker-compose -f ./user_api/docker-compose.yml up user_api
+	docker-compose -f ./user_api/docker-compose.yml up
 
 .PHONY: api
 api:
-	docker-compose -f ./api/docker-compose.yml up api
+	docker-compose -f ./api/docker-compose.yml up
+
+.PHONY: down
+down:
+	docker-compose -f ./user_api/docker-compose.yml down
+	docker-compose -f ./auth_api/docker-compose.yml down
+	docker-compose -f ./api/docker-compose.yml down
 
 .PHONY: server
 server:
