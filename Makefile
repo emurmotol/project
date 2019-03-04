@@ -17,7 +17,7 @@ install: jwt-certs
 	export GO111MODULE=off; go get -v github.com/kujtimiihoxha/kit
 	export GO111MODULE=off; go get -v github.com/99designs/gqlgen/cmd
 	export GO111MODULE=off; go get -v github.com/vektah/dataloaden
-	export GO111MODULE=off; go get -v -tags 'postgres' -u github.com/golang-migrate/migrate/cmd/migrate
+	export GO111MODULE=off; go get -v -tags 'postgres' github.com/golang-migrate/migrate/cmd/migrate
 
 .PHONY: proto
 proto:
