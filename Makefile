@@ -71,5 +71,6 @@ migrate:
 
 .PHONY: migrate-down
 migrate-down:
+	# migrate -verbose -source file://server/postgres/migrations -database postgres://root:postgres@localhost:5433/project?sslmode=disable force 20190304220339 down
 	migrate -verbose -source file://server/postgres/migrations -database postgres://root:postgres@localhost:5433/project?sslmode=disable down
 

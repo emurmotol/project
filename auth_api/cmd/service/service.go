@@ -137,6 +137,9 @@ func getEndpointMiddleware(logger log.Logger) (mw map[string][]endpoint1.Middlew
 	}
 	jwtParserMiddleware := jwt.NewParser(keyFunc, stdjwt.SigningMethodRS256, newClaims)
 	mw["Restricted"] = append(mw["Restricted"], jwtParserMiddleware)
+
+	// user_api middleware
+	addEndpointMiddlewareToAllMethods(mw, endpoint.UserApiMiddleware())
 	return
 }
 func initMetricsEndpoint(g *group.Group) {

@@ -9,6 +9,7 @@ require (
 	github.com/go-sql-driver/mysql v1.4.1 // indirect
 	github.com/gofrs/uuid v3.2.0+incompatible // indirect
 	github.com/golang/protobuf v1.3.0
+	github.com/google/uuid v1.1.1
 	github.com/gorilla/handlers v1.4.0
 	github.com/gorilla/mux v1.7.0
 	github.com/jinzhu/gorm v1.9.2
@@ -21,6 +22,7 @@ require (
 	github.com/opentracing/opentracing-go v1.0.2
 	github.com/openzipkin/zipkin-go-opentracing v0.3.5
 	github.com/prometheus/client_golang v0.9.2
+	github.com/satori/go.uuid v1.2.0
 	github.com/spf13/viper v1.3.1
 	golang.org/x/net v0.0.0-20190227160552-c95aed5357e7
 	google.golang.org/grpc v1.19.0

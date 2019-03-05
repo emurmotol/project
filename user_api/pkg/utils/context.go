@@ -10,7 +10,7 @@ import (
 type contextKey string
 
 const (
-	DBContextKey contextKey = "DB"
+	DBContextKey contextKey = "db"
 )
 
 func GetDB(ctx context.Context) *gorm.DB {

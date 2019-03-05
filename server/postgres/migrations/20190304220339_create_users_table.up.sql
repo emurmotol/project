@@ -1,7 +1,8 @@
 CREATE SEQUENCE id_seq;
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE users (
-  id bigint NOT NULL DEFAULT nextval('id_seq'),
+  id uuid NOT NULL DEFAULT uuid_generate_v4(),
   username    varchar(40) unique NOT NULL,
   email   varchar(40) unique NOT NULL,
   password   varchar(40) NOT NULL,

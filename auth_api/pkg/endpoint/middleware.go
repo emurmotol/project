@@ -5,9 +5,13 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/emurmotol/project/auth_api/pkg/grpc/pb"
+	"github.com/emurmotol/project/auth_api/pkg/utils"
 	endpoint "github.com/go-kit/kit/endpoint"
 	log "github.com/go-kit/kit/log"
 	metrics "github.com/go-kit/kit/metrics"
+	"github.com/spf13/viper"
+	"google.golang.org/grpc"
 )
 
 // InstrumentingMiddleware returns an endpoint middleware that records
@@ -33,6 +37,21 @@ func LoggingMiddleware(logger log.Logger) endpoint.Middleware {
 			defer func(begin time.Time) {
 				logger.Log("transport_error", err, "took", time.Since(begin))
 			}(time.Now())
+			return next(ctx, request)
+		}
+	}
+}
+
+func UserApiMiddleware() endpoint.Middleware {
+	return func(next endpoint.Endpoint) endpoint.Endpoint {
+		return func(ctx context.Context, request interface{}) (response interface{}, err error) {
+			conn, err := grpc.Dial(viper.GetString("USER_API_GRPC_ADDRESS"), grpc.WithInsecure())
+			if err != nil {
+				return nil, err
+			}
+			svc := pb.NewUserApiClient(conn)
+			defer conn.Close()
+			ctx = context.WithValue(ctx, utils.UserApiContextKey, svc)
 			return next(ctx, request)
 		}
 	}

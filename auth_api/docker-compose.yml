@@ -16,3 +16,4 @@ services:
     - JWT_PUBLIC_KEY=/go/src/github.com/emurmotol/project/auth_api/certs/jwt.key.pub
     - JWT_EXPIRES_IN_SECONDS=86400
     - JWT_TOKEN_TYPE=Bearer
+    - USER_API_GRPC_ADDRESS=10.10.2.250:8087

@@ -2,9 +2,11 @@ package service
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	stdjwt "github.com/dgrijalva/jwt-go"
+	"github.com/emurmotol/project/auth_api/pkg/grpc/pb"
 	"github.com/emurmotol/project/auth_api/pkg/utils"
 	"github.com/spf13/viper"
 )
@@ -19,17 +21,26 @@ type AuthApiService interface {
 type basicAuthApiService struct{}
 
 func (b *basicAuthApiService) Login(ctx context.Context, username string, password string) (accessToken string, tokenType string, expiresAt int64, err error) {
+	userApi := utils.GetUserApi(ctx)
+	reply, err := userApi.GetByUsername(ctx, &pb.GetByUsernameRequest{Username: username})
+	if err != nil {
+		return "", "", int64(0), err
+	}
+
+	if reply.User.Password != password {
+		return "", "", int64(0), errors.New("wrong password")
+	}
 	now := time.Now()
 	expiresAt = now.Local().Add(time.Second * viper.GetDuration("JWT_EXPIRES_IN_SECONDS")).Unix()
 	claims := &utils.JWTClaims{
 		StandardClaims: stdjwt.StandardClaims{
-			Audience:  "domain_name",
+			Audience:  "0.0.0.0",
 			ExpiresAt: expiresAt,
-			Id:        "user_id",
+			Id:        reply.User.ID,
 			IssuedAt:  now.Unix(),
-			Issuer:    "auth_api",
+			Issuer:    "0.0.0.0",
 			NotBefore: 0,
-			Subject:   "user_role",
+			Subject:   reply.User.Role,
 		},
 	}
 	token, err := utils.GenerateJWTToken(claims, viper.GetString("JWT_PRIVATE_KEY"))
