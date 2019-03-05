@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"strings"
 
 	"github.com/emurmotol/project/user_api/pkg/utils"
 )
@@ -55,7 +56,7 @@ func (b *basicUserApiService) CreateUser(ctx context.Context, username string, e
 
 	user = User{
 		Username: username,
-		Email:    email,
+		Email:    strings.ToLower(email),
 		Password: hashPassword,
 		Role:     role,
 	}
