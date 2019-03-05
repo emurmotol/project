@@ -37,3 +37,10 @@ func (l loggingMiddleware) CreateUser(ctx context.Context, username string, emai
 	}()
 	return l.next.CreateUser(ctx, username, email, password, role)
 }
+
+func (l loggingMiddleware) GetUserForAuth(ctx context.Context, username string) (user User, err error) {
+	defer func() {
+		l.logger.Log("method", "GetUserForAuth", "username", username, "user", fmt.Sprint(user), "err", err)
+	}()
+	return l.next.GetUserForAuth(ctx, username)
+}

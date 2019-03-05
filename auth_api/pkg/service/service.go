@@ -22,7 +22,7 @@ type basicAuthApiService struct{}
 
 func (b *basicAuthApiService) Login(ctx context.Context, username string, password string) (accessToken string, tokenType string, expiresAt int64, err error) {
 	userApi := utils.GetUserApi(ctx)
-	reply, err := userApi.GetByUsername(ctx, &pb.GetByUsernameRequest{Username: username})
+	reply, err := userApi.GetUserForAuth(ctx, &pb.GetUserForAuthRequest{Username: username})
 	if err != nil {
 		return "", "", int64(0), err
 	}

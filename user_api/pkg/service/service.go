@@ -5,6 +5,8 @@ import (
 	"strings"
 	"time"
 
+	// "github.com/casbin/casbin"
+	// gormadapter "github.com/casbin/gorm-adapter"
 	"github.com/emurmotol/project/user_api/pkg/utils"
 )
 
@@ -12,6 +14,7 @@ import (
 type UserApiService interface {
 	GetByUsername(ctx context.Context, username string) (user User, err error)
 	CreateUser(ctx context.Context, username string, email string, password string, role string) (user User, err error)
+	GetUserForAuth(ctx context.Context, username string) (user User, err error)
 }
 
 type User struct {
@@ -71,6 +74,15 @@ func (b *basicUserApiService) CreateUser(ctx context.Context, username string, e
 		Role:     role,
 	}
 	if err := db.Create(&user).Error; err != nil {
+		return User{}, err
+	}
+	return user, nil
+}
+
+func (b *basicUserApiService) GetUserForAuth(ctx context.Context, username string) (user User, err error) {
+	db := utils.GetDB(ctx)
+
+	if err := db.Where(User{Username: username}).Or(User{Email: username}).First(&user).Error; err != nil {
 		return User{}, err
 	}
 	return user, nil

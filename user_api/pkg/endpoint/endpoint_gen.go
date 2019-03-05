@@ -10,22 +10,27 @@ import (
 // meant to be used as a helper struct, to collect all of the endpoints into a
 // single parameter.
 type Endpoints struct {
-	GetByUsernameEndpoint endpoint.Endpoint
-	CreateUserEndpoint    endpoint.Endpoint
+	GetByUsernameEndpoint  endpoint.Endpoint
+	CreateUserEndpoint     endpoint.Endpoint
+	GetUserForAuthEndpoint endpoint.Endpoint
 }
 
 // New returns a Endpoints struct that wraps the provided service, and wires in all of the
 // expected endpoint middlewares
 func New(s service.UserApiService, mdw map[string][]endpoint.Middleware) Endpoints {
 	eps := Endpoints{
-		CreateUserEndpoint:    MakeCreateUserEndpoint(s),
-		GetByUsernameEndpoint: MakeGetByUsernameEndpoint(s),
+		CreateUserEndpoint:     MakeCreateUserEndpoint(s),
+		GetByUsernameEndpoint:  MakeGetByUsernameEndpoint(s),
+		GetUserForAuthEndpoint: MakeGetUserForAuthEndpoint(s),
 	}
 	for _, m := range mdw["GetByUsername"] {
 		eps.GetByUsernameEndpoint = m(eps.GetByUsernameEndpoint)
 	}
 	for _, m := range mdw["CreateUser"] {
 		eps.CreateUserEndpoint = m(eps.CreateUserEndpoint)
+	}
+	for _, m := range mdw["GetUserForAuth"] {
+		eps.GetUserForAuthEndpoint = m(eps.GetUserForAuthEndpoint)
 	}
 	return eps
 }

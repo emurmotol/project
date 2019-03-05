@@ -5,10 +5,15 @@ import (
 	"fmt"
 	"time"
 
+	log1 "log"
+
+	gormadapter "github.com/casbin/gorm-adapter"
 	"github.com/emurmotol/project/user_api/pkg/utils"
+	"github.com/go-kit/kit/auth/casbin"
 	endpoint "github.com/go-kit/kit/endpoint"
 	log "github.com/go-kit/kit/log"
 	metrics "github.com/go-kit/kit/metrics"
+	"github.com/go-kit/kit/transport/http"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/spf13/viper"
@@ -51,7 +56,23 @@ func PostgresMiddleware() endpoint.Middleware {
 			}
 			defer db.Close()
 			ctx = context.WithValue(ctx, utils.DBContextKey, db)
+
+			// setup casbin context from db
+			ctx = context.WithValue(ctx, casbin.CasbinModelContextKey, viper.GetString("CASBIN_MODEL"))
+			ctx = context.WithValue(ctx, casbin.CasbinPolicyContextKey, gormadapter.NewAdapterByDB(db))
 			return next(ctx, request)
+		}
+	}
+}
+
+func AuthorizerMiddleware() endpoint.Middleware {
+	return func(next endpoint.Endpoint) endpoint.Endpoint {
+		return func(ctx context.Context, request interface{}) (response interface{}, err error) {
+			subject := utils.GetClaims(ctx).Id
+			object := ctx.Value(http.ContextKeyRequestPath).(string)   // http only
+			action := ctx.Value(http.ContextKeyRequestMethod).(string) // http only
+			log1.Println(subject, object, action)
+			return casbin.NewEnforcer(subject, object, action)(next(ctx, request))
 		}
 	}
 }

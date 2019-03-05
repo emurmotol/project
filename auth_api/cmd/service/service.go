@@ -124,6 +124,9 @@ func getEndpointMiddleware(logger log.Logger) (mw map[string][]endpoint1.Middlew
 	}, []string{"method", "success"})
 	addDefaultEndpointMiddleware(logger, duration, mw)
 
+	// user_api middleware
+	addEndpointMiddlewareToAllMethods(mw, endpoint.UserApiMiddleware())
+
 	// jwt middleware
 	keyFunc := func(token *stdjwt.Token) (interface{}, error) {
 		key, err := ioutil.ReadFile(viper.GetString("JWT_PUBLIC_KEY"))
@@ -137,9 +140,6 @@ func getEndpointMiddleware(logger log.Logger) (mw map[string][]endpoint1.Middlew
 	}
 	jwtParserMiddleware := jwt.NewParser(keyFunc, stdjwt.SigningMethodRS256, newClaims)
 	mw["Restricted"] = append(mw["Restricted"], jwtParserMiddleware)
-
-	// user_api middleware
-	addEndpointMiddlewareToAllMethods(mw, endpoint.UserApiMiddleware())
 	return
 }
 func initMetricsEndpoint(g *group.Group) {

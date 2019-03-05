@@ -16,6 +16,7 @@ import (
 // makeGetByUsernameHandler creates the handler logic
 func makeGetByUsernameHandler(m *mux.Router, endpoints endpoint.Endpoints, options []http.ServerOption) {
 	options = append(options, http.ServerBefore(jwt.HTTPToContext()))
+	options = append(options, http.ServerBefore(http.PopulateRequestContext))
 	m.Methods("GET").Path("/get-by-username/{username}").Handler(handlers.CORS(handlers.AllowedMethods([]string{"GET"}), handlers.AllowedOrigins([]string{"*"}))(http.NewServer(endpoints.GetByUsernameEndpoint, decodeGetByUsernameRequest, encodeGetByUsernameResponse, options...)))
 }
 
@@ -85,6 +86,30 @@ func decodeCreateUserRequest(_ context.Context, r *http1.Request) (interface{}, 
 // encodeCreateUserResponse is a transport/http.EncodeResponseFunc that encodes
 // the response as JSON to the response writer
 func encodeCreateUserResponse(ctx context.Context, w http1.ResponseWriter, response interface{}) (err error) {
+	if f, ok := response.(endpoint.Failure); ok && f.Failed() != nil {
+		ErrorEncoder(ctx, f.Failed(), w)
+		return nil
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	err = json.NewEncoder(w).Encode(response)
+	return
+}
+
+// makeGetUserForAuthHandler creates the handler logic
+func makeGetUserForAuthHandler(m *mux.Router, endpoints endpoint.Endpoints, options []http.ServerOption) {
+	m.Methods("GET").Path("/get-user-for-auth/{username}").Handler(handlers.CORS(handlers.AllowedMethods([]string{"GET"}), handlers.AllowedOrigins([]string{"*"}))(http.NewServer(endpoints.GetUserForAuthEndpoint, decodeGetUserForAuthRequest, encodeGetUserForAuthResponse, options...)))
+}
+
+// decodeGetUserForAuthRequest is a transport/http.DecodeRequestFunc that decodes a
+// JSON-encoded request from the HTTP request body.
+func decodeGetUserForAuthRequest(_ context.Context, r *http1.Request) (interface{}, error) {
+	req := endpoint.GetUserForAuthRequest{}
+	return req, nil
+}
+
+// encodeGetUserForAuthResponse is a transport/http.EncodeResponseFunc that encodes
+// the response as JSON to the response writer
+func encodeGetUserForAuthResponse(ctx context.Context, w http1.ResponseWriter, response interface{}) (err error) {
 	if f, ok := response.(endpoint.Failure); ok && f.Failed() != nil {
 		ErrorEncoder(ctx, f.Failed(), w)
 		return nil

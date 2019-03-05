@@ -23,27 +23,30 @@ func createService(endpoints endpoint.Endpoints) (g *group.Group) {
 }
 func defaultHttpOptions(logger log.Logger, tracer opentracinggo.Tracer) map[string][]http.ServerOption {
 	options := map[string][]http.ServerOption{
-		"CreateUser":    {http.ServerErrorEncoder(http1.ErrorEncoder), http.ServerErrorLogger(logger), http.ServerBefore(opentracing.HTTPToContext(tracer, "CreateUser", logger))},
-		"GetByUsername": {http.ServerErrorEncoder(http1.ErrorEncoder), http.ServerErrorLogger(logger), http.ServerBefore(opentracing.HTTPToContext(tracer, "GetByUsername", logger))},
+		"CreateUser":     {http.ServerErrorEncoder(http1.ErrorEncoder), http.ServerErrorLogger(logger), http.ServerBefore(opentracing.HTTPToContext(tracer, "CreateUser", logger))},
+		"GetByUsername":  {http.ServerErrorEncoder(http1.ErrorEncoder), http.ServerErrorLogger(logger), http.ServerBefore(opentracing.HTTPToContext(tracer, "GetByUsername", logger))},
+		"GetUserForAuth": {http.ServerErrorEncoder(http1.ErrorEncoder), http.ServerErrorLogger(logger), http.ServerBefore(opentracing.HTTPToContext(tracer, "GetUserForAuth", logger))},
 	}
 	return options
 }
 func defaultGRPCOptions(logger log.Logger, tracer opentracinggo.Tracer) map[string][]grpc.ServerOption {
 	options := map[string][]grpc.ServerOption{
-		"CreateUser":    {grpc.ServerErrorLogger(logger), grpc.ServerBefore(opentracing.GRPCToContext(tracer, "CreateUser", logger))},
-		"GetByUsername": {grpc.ServerErrorLogger(logger), grpc.ServerBefore(opentracing.GRPCToContext(tracer, "GetByUsername", logger))},
+		"CreateUser":     {grpc.ServerErrorLogger(logger), grpc.ServerBefore(opentracing.GRPCToContext(tracer, "CreateUser", logger))},
+		"GetByUsername":  {grpc.ServerErrorLogger(logger), grpc.ServerBefore(opentracing.GRPCToContext(tracer, "GetByUsername", logger))},
+		"GetUserForAuth": {grpc.ServerErrorLogger(logger), grpc.ServerBefore(opentracing.GRPCToContext(tracer, "GetUserForAuth", logger))},
 	}
 	return options
 }
 func addDefaultEndpointMiddleware(logger log.Logger, duration *prometheus.Summary, mw map[string][]endpoint1.Middleware) {
 	mw["GetByUsername"] = []endpoint1.Middleware{endpoint.LoggingMiddleware(log.With(logger, "method", "GetByUsername")), endpoint.InstrumentingMiddleware(duration.With("method", "GetByUsername"))}
 	mw["CreateUser"] = []endpoint1.Middleware{endpoint.LoggingMiddleware(log.With(logger, "method", "CreateUser")), endpoint.InstrumentingMiddleware(duration.With("method", "CreateUser"))}
+	mw["GetUserForAuth"] = []endpoint1.Middleware{endpoint.LoggingMiddleware(log.With(logger, "method", "GetUserForAuth")), endpoint.InstrumentingMiddleware(duration.With("method", "GetUserForAuth"))}
 }
 func addDefaultServiceMiddleware(logger log.Logger, mw []service.Middleware) []service.Middleware {
 	return append(mw, service.LoggingMiddleware(logger))
 }
 func addEndpointMiddlewareToAllMethods(mw map[string][]endpoint1.Middleware, m endpoint1.Middleware) {
-	methods := []string{"GetByUsername", "CreateUser"}
+	methods := []string{"GetByUsername", "CreateUser", "GetUserForAuth"}
 	for _, v := range methods {
 		mw[v] = append(mw[v], m)
 	}

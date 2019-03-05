@@ -14,5 +14,6 @@ func NewHTTPHandler(endpoints endpoint.Endpoints, options map[string][]http.Serv
 	m := mux.NewRouter()
 	makeGetByUsernameHandler(m, endpoints, options["GetByUsername"])
 	makeCreateUserHandler(m, endpoints, options["CreateUser"])
+	makeGetUserForAuthHandler(m, endpoints, options["GetUserForAuth"])
 	return m
 }

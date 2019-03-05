@@ -124,6 +124,12 @@ func getEndpointMiddleware(logger log.Logger) (mw map[string][]endpoint1.Middlew
 	}, []string{"method", "success"})
 	addDefaultEndpointMiddleware(logger, duration, mw)
 
+	// casbin middleware
+	mw["GetByUsername"] = append(mw["GetByUsername"], endpoint.AuthorizerMiddleware())
+
+	// postgres middleware
+	addEndpointMiddlewareToAllMethods(mw, endpoint.PostgresMiddleware())
+
 	// jwt middleware
 	keyFunc := func(token *stdjwt.Token) (interface{}, error) {
 		key, err := ioutil.ReadFile(viper.GetString("JWT_PUBLIC_KEY"))
@@ -136,10 +142,7 @@ func getEndpointMiddleware(logger log.Logger) (mw map[string][]endpoint1.Middlew
 		return &utils.JWTClaims{}
 	}
 	jwtParserMiddleware := jwt.NewParser(keyFunc, stdjwt.SigningMethodRS256, newClaims)
-	mw["EndpointName"] = append(mw["EndpointName"], jwtParserMiddleware)
-
-	// postgres middleware
-	addEndpointMiddlewareToAllMethods(mw, endpoint.PostgresMiddleware())
+	mw["GetByUsername"] = append(mw["GetByUsername"], jwtParserMiddleware)
 	return
 }
 func initMetricsEndpoint(g *group.Group) {

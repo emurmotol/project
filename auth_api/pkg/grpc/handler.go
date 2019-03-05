@@ -5,6 +5,7 @@ import (
 
 	endpoint "github.com/emurmotol/project/auth_api/pkg/endpoint"
 	pb "github.com/emurmotol/project/auth_api/pkg/grpc/pb"
+	"github.com/go-kit/kit/auth/jwt"
 	grpc "github.com/go-kit/kit/transport/grpc"
 	context1 "golang.org/x/net/context"
 )
@@ -45,6 +46,7 @@ func (g *grpcServer) Login(ctx context1.Context, req *pb.LoginRequest) (*pb.Logi
 
 // makeRestrictedHandler creates the handler logic
 func makeRestrictedHandler(endpoints endpoint.Endpoints, options []grpc.ServerOption) grpc.Handler {
+	options = append(options, grpc.ServerBefore(jwt.GRPCToContext()))
 	return grpc.NewServer(endpoints.RestrictedEndpoint, decodeRestrictedRequest, encodeRestrictedResponse, options...)
 }
 

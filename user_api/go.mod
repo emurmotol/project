@@ -1,6 +1,9 @@
 module github.com/emurmotol/project/user_api
 
 require (
+	github.com/casbin/casbin v1.8.1
+	github.com/casbin/gorm-adapter v0.0.0-20190103152927-5f0f4b5ecad7
+	github.com/davecgh/go-spew v1.1.1
 	github.com/denisenkom/go-mssqldb v0.0.0-20190204142019-df6d76eb9289 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/emurmotol/project/auth_api v0.0.0-20190303021834-07a5302d5cfa

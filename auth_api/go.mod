@@ -4,6 +4,7 @@ require (
 	github.com/Shopify/sarama v1.21.0 // indirect
 	github.com/VividCortex/gohistogram v1.0.0 // indirect
 	github.com/apache/thrift v0.12.0 // indirect
+	github.com/davecgh/go-spew v1.1.1
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/emurmotol/project/api v0.0.0-20190305030225-dd45c5f8a346
 	github.com/go-kit/kit v0.8.0

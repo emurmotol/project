@@ -115,3 +115,41 @@ func (e Endpoints) CreateUser(ctx context.Context, username string, email string
 	}
 	return response.(CreateUserResponse).User, response.(CreateUserResponse).Err
 }
+
+// GetUserForAuthRequest collects the request parameters for the GetUserForAuth method.
+type GetUserForAuthRequest struct {
+	Username string `json:"username"`
+}
+
+// GetUserForAuthResponse collects the response parameters for the GetUserForAuth method.
+type GetUserForAuthResponse struct {
+	User service.User `json:"user"`
+	Err  error        `json:"error"`
+}
+
+// MakeGetUserForAuthEndpoint returns an endpoint that invokes GetUserForAuth on the service.
+func MakeGetUserForAuthEndpoint(s service.UserApiService) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(GetUserForAuthRequest)
+		user, err := s.GetUserForAuth(ctx, req.Username)
+		return GetUserForAuthResponse{
+			Err:  err,
+			User: user,
+		}, nil
+	}
+}
+
+// Failed implements Failer.
+func (r GetUserForAuthResponse) Failed() error {
+	return r.Err
+}
+
+// GetUserForAuth implements Service. Primarily useful in a client.
+func (e Endpoints) GetUserForAuth(ctx context.Context, username string) (user service.User, err error) {
+	request := GetUserForAuthRequest{Username: username}
+	response, err := e.GetUserForAuthEndpoint(ctx, request)
+	if err != nil {
+		return
+	}
+	return response.(GetUserForAuthResponse).User, response.(GetUserForAuthResponse).Err
+}
