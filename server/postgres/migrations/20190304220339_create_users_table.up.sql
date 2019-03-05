@@ -1,4 +1,4 @@
-CREATE SEQUENCE id_seq;
+-- CREATE SEQUENCE id_seq;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE users (
