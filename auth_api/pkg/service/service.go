@@ -23,9 +23,9 @@ func (b *basicAuthApiService) Login(ctx context.Context, username string, passwo
 	expiresAt = now.Local().Add(time.Second * viper.GetDuration("JWT_EXPIRES_IN_SECONDS")).Unix()
 	claims := &utils.JWTClaims{
 		StandardClaims: stdjwt.StandardClaims{
-			Audience:  "user_id",
+			Audience:  "domain_name",
 			ExpiresAt: expiresAt,
-			Id:        "jwt_id",
+			Id:        "user_id",
 			IssuedAt:  now.Unix(),
 			Issuer:    "auth_api",
 			NotBefore: 0,
