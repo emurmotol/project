@@ -141,8 +141,8 @@ func getEndpointMiddleware(logger log.Logger) (mw map[string][]endpoint1.Middlew
 	newClaims := func() stdjwt.Claims {
 		return &utils.JWTClaims{}
 	}
-	jwtParserMiddleware := jwt.NewParser(keyFunc, stdjwt.SigningMethodRS256, newClaims)
-	mw["GetByUsername"] = append(mw["GetByUsername"], jwtParserMiddleware)
+	jwtMiddleware := jwt.NewParser(keyFunc, stdjwt.SigningMethodRS256, newClaims)
+	mw["GetByUsername"] = append(mw["GetByUsername"], jwtMiddleware)
 	return
 }
 func initMetricsEndpoint(g *group.Group) {
