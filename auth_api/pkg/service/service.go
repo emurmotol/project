@@ -26,8 +26,9 @@ func (b *basicAuthApiService) Login(ctx context.Context, username string, passwo
 	if err != nil {
 		return "", "", int64(0), err
 	}
+	user := reply.User
 
-	if reply.User.Password != password {
+	if user.Password != password {
 		return "", "", int64(0), errors.New("wrong password")
 	}
 	now := time.Now()
@@ -36,11 +37,11 @@ func (b *basicAuthApiService) Login(ctx context.Context, username string, passwo
 		StandardClaims: stdjwt.StandardClaims{
 			Audience:  "0.0.0.0",
 			ExpiresAt: expiresAt,
-			Id:        reply.User.ID,
+			Id:        user.ID,
 			IssuedAt:  now.Unix(),
 			Issuer:    "0.0.0.0",
 			NotBefore: 0,
-			Subject:   reply.User.Role,
+			Subject:   user.Role,
 		},
 	}
 	token, err := utils.GenerateJWTToken(claims, viper.GetString("JWT_PRIVATE_KEY"))
