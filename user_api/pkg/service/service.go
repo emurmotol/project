@@ -16,7 +16,7 @@ type User struct {
 	ID       string `json:"id"`
 	Username string `json:"username"`
 	Email    string `json:"email"`
-	Password string `json:"password"`
+	Password string `json:"-"`
 	Role     string `json:"role"`
 }
 
@@ -25,7 +25,7 @@ type basicUserApiService struct{}
 func (b *basicUserApiService) GetByUsername(ctx context.Context, username string) (user User, err error) {
 	db := utils.GetDB(ctx)
 
-	if err := db.Find(&user, User{Username: username}).Error; err != nil {
+	if err := db.First(&user, User{Username: username}).Error; err != nil {
 		return User{}, err
 	}
 	return user, nil
