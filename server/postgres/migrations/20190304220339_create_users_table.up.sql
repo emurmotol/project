@@ -7,5 +7,8 @@ CREATE TABLE users (
   email   varchar(40) unique NOT NULL,
   password   varchar(60) NOT NULL,
   role   varchar(40) NOT NULL,
+  created_at timestamp NOT NULL,
+  updated_at timestamp NOT NULL,
+  deleted_at timestamp,
   CONSTRAINT users_id PRIMARY KEY (id)
 );

@@ -32,6 +32,9 @@ message User {
     string Email = 3;
     string Password = 4;
     string Role = 5;
+    string CreatedAt = 6;
+    string UpdatedAt = 7;
+    string DeletedAt = 8;
 }
 
 message CreateUserReply {

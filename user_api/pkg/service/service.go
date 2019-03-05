@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"strings"
+	"time"
 
 	"github.com/emurmotol/project/user_api/pkg/utils"
 )
@@ -14,11 +15,25 @@ type UserApiService interface {
 }
 
 type User struct {
-	ID       string `json:"id"`
-	Username string `json:"username"`
-	Email    string `json:"email"`
-	Password string `json:"-"`
-	Role     string `json:"role"`
+	ID        string     `json:"id"`
+	Username  string     `json:"username"`
+	Email     string     `json:"email"`
+	Password  string     `json:"-"`
+	Role      string     `json:"role"`
+	CreatedAt time.Time  `json:"created_at"` // 2006-01-02 15:04:05.000000
+	UpdatedAt time.Time  `json:"updated_at"` // 2006-01-02 15:04:05.000000
+	DeletedAt *time.Time `json:"deleted_at"` // 2006-01-02 15:04:05.000000
+}
+
+func (u *User) BeforeCreate() (err error) {
+	u.Email = strings.ToLower(u.Email)
+
+	hashPassword, err := utils.HashPassword(u.Password)
+	if err != nil {
+		return err
+	}
+	u.Password = hashPassword
+	return nil
 }
 
 type basicUserApiService struct{}
@@ -49,15 +64,10 @@ func New(middleware []Middleware) UserApiService {
 func (b *basicUserApiService) CreateUser(ctx context.Context, username string, email string, password string, role string) (user User, err error) {
 	db := utils.GetDB(ctx)
 
-	hashPassword, err := utils.HashPassword(password)
-	if err != nil {
-		return User{}, err
-	}
-
 	user = User{
 		Username: username,
-		Email:    strings.ToLower(email),
-		Password: hashPassword,
+		Email:    email,
+		Password: password,
 		Role:     role,
 	}
 	if err := db.Create(&user).Error; err != nil {

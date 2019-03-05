@@ -20,12 +20,19 @@ type GetByUsernameResponse struct {
 }
 
 func ConvertUser(user service.User) *pb.User {
+	deletedAt := ""
+	if user.DeletedAt != nil {
+		deletedAt = user.DeletedAt.String()
+	}
 	return &pb.User{
-		ID:       user.ID,
-		Username: user.Username,
-		Email:    user.Email,
-		Password: user.Password,
-		Role:     user.Role,
+		ID:        user.ID,
+		Username:  user.Username,
+		Email:     user.Email,
+		Password:  user.Password,
+		Role:      user.Role,
+		CreatedAt: user.CreatedAt.String(),
+		UpdatedAt: user.UpdatedAt.String(),
+		DeletedAt: deletedAt,
 	}
 }
 
