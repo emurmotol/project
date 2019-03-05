@@ -35,7 +35,7 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v0.0.0-20170224212429-dcecefd839c4 // indirect
 	golang.org/x/arch v0.0.0-20190226203302-36aee92af9e8 // indirect
-	golang.org/x/crypto v0.0.0-20190225124518-7f87c0fbb88b // indirect
+	golang.org/x/crypto v0.0.0-20190225124518-7f87c0fbb88b
 	golang.org/x/net v0.0.0-20190227160552-c95aed5357e7
 	google.golang.org/grpc v1.19.0
 	sourcegraph.com/sourcegraph/appdash v0.0.0-20190107175209-d9ea5c54f7dc

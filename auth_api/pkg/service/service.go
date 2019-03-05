@@ -28,7 +28,7 @@ func (b *basicAuthApiService) Login(ctx context.Context, username string, passwo
 	}
 	user := reply.User
 
-	if user.Password != password {
+	if !utils.CheckPasswordHash(password, user.Password) {
 		return "", "", int64(0), errors.New("wrong password")
 	}
 	now := time.Now()

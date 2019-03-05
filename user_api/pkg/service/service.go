@@ -48,10 +48,15 @@ func New(middleware []Middleware) UserApiService {
 func (b *basicUserApiService) CreateUser(ctx context.Context, username string, email string, password string, role string) (user User, err error) {
 	db := utils.GetDB(ctx)
 
+	hashPassword, err := utils.HashPassword(password)
+	if err != nil {
+		return User{}, err
+	}
+
 	user = User{
 		Username: username,
 		Email:    email,
-		Password: password,
+		Password: hashPassword,
 		Role:     role,
 	}
 	if err := db.Create(&user).Error; err != nil {
