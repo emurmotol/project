@@ -2,7 +2,7 @@ package utils
 
 import (
 	"context"
-	"fmt"
+	"errors"
 
 	"github.com/emurmotol/project/auth_api/pkg/grpc/pb"
 	"github.com/go-kit/kit/auth/jwt"
@@ -21,7 +21,7 @@ func GetClaims(ctx context.Context) *JWTClaims {
 func MustGetClaims(ctx context.Context) (*JWTClaims, error) {
 	db, ok := ctx.Value(jwt.JWTClaimsContextKey).(*JWTClaims)
 	if !ok {
-		return nil, fmt.Errorf("failed to get %s from context", jwt.JWTClaimsContextKey)
+		return nil, errors.New("failed to get JWTClaimsContextKey value from context")
 	}
 	return db, nil
 }
@@ -33,7 +33,7 @@ func GetUserApiClient(ctx context.Context) pb.UserApiClient {
 func MustGetUserApiClient(ctx context.Context) (pb.UserApiClient, error) {
 	client, ok := ctx.Value(UserApiClientContextKey).(pb.UserApiClient)
 	if !ok {
-		return nil, fmt.Errorf("failed to get %s from context", UserApiClientContextKey)
+		return nil, errors.New("failed to get UserApiClientContextKey value from context")
 	}
 	return client, nil
 }
