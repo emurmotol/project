@@ -14,7 +14,6 @@ import (
 	endpoint "github.com/emurmotol/project/user_api/pkg/endpoint"
 	grpc "github.com/emurmotol/project/user_api/pkg/grpc"
 	pb "github.com/emurmotol/project/user_api/pkg/grpc/pb"
-	http "github.com/emurmotol/project/user_api/pkg/http"
 	service "github.com/emurmotol/project/user_api/pkg/service"
 	"github.com/emurmotol/project/user_api/pkg/utils"
 	"github.com/go-kit/kit/auth/jwt"
@@ -90,22 +89,6 @@ func Run() {
 	initMetricsEndpoint(g)
 	initCancelInterrupt(g)
 	logger.Log("exit", g.Run())
-
-}
-func initHttpHandler(endpoints endpoint.Endpoints, g *group.Group) {
-	options := defaultHttpOptions(logger, tracer)
-
-	httpHandler := http.NewHTTPHandler(endpoints, options)
-	httpListener, err := net.Listen("tcp", *httpAddr)
-	if err != nil {
-		logger.Log("transport", "HTTP", "during", "Listen", "err", err)
-	}
-	g.Add(func() error {
-		logger.Log("transport", "HTTP", "addr", *httpAddr)
-		return http1.Serve(httpListener, httpHandler)
-	}, func(error) {
-		httpListener.Close()
-	})
 
 }
 func getServiceMiddleware(logger log.Logger) (mw []service.Middleware) {

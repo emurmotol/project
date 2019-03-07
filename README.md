@@ -85,10 +85,6 @@ kit new service service_name
 
 # add endpoints to the service
 
-# http transport
-kit generate service service_name -w --gorilla
-
-# grpc transport
 kit generate service service_name -w -t grpc
 ```
 
@@ -106,9 +102,11 @@ Create migration
 migrate create -ext sql -dir=./server/postgres/migrations create_sample_table
 ```
 
-## Postman Collection
+## Notes
 
-Import link: https://www.getpostman.com/collections/c162d7e4484b3c51e985
+```bash
+$(ifconfig enp2s0 | sed -En -e 's/.*inet ([0-9.]+).*/\1/p')
+```
 
 ## Donations
 
@@ -121,9 +119,3 @@ ETH: `0x4939e019c56a8885bcd5fac11eba1cb1b147dc6e`
 XRP: `rU2mEJSLqBRkYLVTv55rFTgQajkLTnT6mA` DT: `110892`
 
 BAT: `0x0a317eA88131eFD0FC48E0ac9945996Eb690dbc0`
-
-## Notes
-
-```bash
-$(ifconfig enp2s0 | sed -En -e 's/.*inet ([0-9.]+).*/\1/p')
-```
