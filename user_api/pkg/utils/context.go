@@ -43,7 +43,7 @@ func GetRequestMethod(ctx context.Context) string {
 	return ctx.Value(grpc.ContextKeyRequestMethod).(string)
 }
 
-func MustRequestMethod(ctx context.Context) (string, error) {
+func MustGetRequestMethod(ctx context.Context) (string, error) {
 	rm, ok := ctx.Value(grpc.ContextKeyRequestMethod).(string)
 	if !ok {
 		return "", errors.New("failed to get ContextKeyRequestMethod value from context")
