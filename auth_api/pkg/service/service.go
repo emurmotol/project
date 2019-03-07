@@ -21,8 +21,8 @@ type AuthApiService interface {
 type basicAuthApiService struct{}
 
 func (b *basicAuthApiService) Login(ctx context.Context, username string, password string) (accessToken string, tokenType string, expiresAt int64, err error) {
-	userApi := utils.GetUserApi(ctx)
-	reply, err := userApi.GetUserForAuth(ctx, &pb.GetUserForAuthRequest{Username: username})
+	userApiClient := utils.GetUserApiClient(ctx)
+	reply, err := userApiClient.GetUserForAuth(ctx, &pb.GetUserForAuthRequest{Username: username})
 	if err != nil {
 		return "", "", int64(0), err
 	}

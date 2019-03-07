@@ -108,7 +108,7 @@ func getEndpointMiddleware(logger log.Logger) (mw map[string][]endpoint1.Middlew
 	addDefaultEndpointMiddleware(logger, duration, mw)
 
 	// user_api middleware
-	addEndpointMiddlewareToAllMethods(mw, endpoint.UserApiMiddleware())
+	addEndpointMiddlewareToAllMethods(mw, endpoint.UserApiClientMiddleware())
 
 	// jwt middleware
 	keyFunc := func(token *stdjwt.Token) (interface{}, error) {

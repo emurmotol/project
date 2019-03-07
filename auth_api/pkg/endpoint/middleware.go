@@ -42,7 +42,7 @@ func LoggingMiddleware(logger log.Logger) endpoint.Middleware {
 	}
 }
 
-func UserApiMiddleware() endpoint.Middleware {
+func UserApiClientMiddleware() endpoint.Middleware {
 	return func(next endpoint.Endpoint) endpoint.Endpoint {
 		return func(ctx context.Context, request interface{}) (response interface{}, err error) {
 			conn, err := grpc.Dial(viper.GetString("USER_API_GRPC_ADDRESS"), grpc.WithInsecure())
@@ -51,7 +51,7 @@ func UserApiMiddleware() endpoint.Middleware {
 			}
 			svc := pb.NewUserApiClient(conn)
 			defer conn.Close()
-			ctx = context.WithValue(ctx, utils.UserApiContextKey, svc)
+			ctx = context.WithValue(ctx, utils.UserApiClientContextKey, svc)
 			return next(ctx, request)
 		}
 	}
