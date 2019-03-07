@@ -21,7 +21,7 @@ func GetClaims(ctx context.Context) *JWTClaims {
 func MustGetClaims(ctx context.Context) (*JWTClaims, error) {
 	db, ok := ctx.Value(jwt.JWTClaimsContextKey).(*JWTClaims)
 	if !ok {
-		return nil, fmt.Errorf("failed to get %d from context", jwt.JWTClaimsContextKey)
+		return nil, fmt.Errorf("failed to get %s from context", jwt.JWTClaimsContextKey)
 	}
 	return db, nil
 }
