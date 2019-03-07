@@ -108,7 +108,7 @@ func getEndpointMiddleware(logger log.Logger) (mw map[string][]endpoint1.Middlew
 	addDefaultEndpointMiddleware(logger, duration, mw)
 
 	// casbin middleware
-	// mw["GetByUsername"] = append(mw["GetByUsername"], endpoint.AuthorizerMiddleware())
+	mw["GetByUsername"] = append(mw["GetByUsername"], endpoint.AuthorizerMiddleware())
 
 	// postgres middleware
 	addEndpointMiddlewareToAllMethods(mw, endpoint.PostgresMiddleware())

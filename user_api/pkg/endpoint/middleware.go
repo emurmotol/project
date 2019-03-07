@@ -53,10 +53,6 @@ func PostgresMiddleware() endpoint.Middleware {
 			}
 			defer db.Close()
 			ctx = context.WithValue(ctx, utils.DBContextKey, db)
-
-			// setup casbin context from db
-			ctx = context.WithValue(ctx, casbin.CasbinModelContextKey, viper.GetString("CASBIN_MODEL"))
-			ctx = context.WithValue(ctx, casbin.CasbinPolicyContextKey, gormadapter.NewAdapterByDB(db))
 			return next(ctx, request)
 		}
 	}
@@ -65,15 +61,21 @@ func PostgresMiddleware() endpoint.Middleware {
 func AuthorizerMiddleware() endpoint.Middleware {
 	return func(next endpoint.Endpoint) endpoint.Endpoint {
 		return func(ctx context.Context, request interface{}) (response interface{}, err error) {
-			subject := utils.GetClaims(ctx).Id
-			object := "object"
-			action := "action"
-			mw := casbin.NewEnforcer(subject, object, action)(next)
-			ctx1, err := mw(ctx, request)
+			// setup casbin context from db
+			db := utils.GetDB(ctx)
+			ctx = context.WithValue(ctx, casbin.CasbinModelContextKey, viper.GetString("CASBIN_MODEL"))
+			ctx = context.WithValue(ctx, casbin.CasbinPolicyContextKey, gormadapter.NewAdapterByDB(db))
+
+			subject := utils.GetClaims(ctx).Subject
+			object := "/package.service/method"
+			action := "read"
+			e := func(ctx1 context.Context, i interface{}) (interface{}, error) { return ctx1, nil }
+			mw := casbin.NewEnforcer(subject, object, action)(e)
+			ctx2, err := mw(ctx, nil)
 			if err != nil {
 				return nil, err
 			}
-			return next(ctx1.(context.Context), request)
+			return next(ctx2.(context.Context), request)
 		}
 	}
 }
