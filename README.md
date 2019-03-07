@@ -50,7 +50,7 @@ make install
 
 Run migrations
 ```bash
-make migrate
+make migrate-up
 ```
 
 Build the binaries
@@ -65,12 +65,15 @@ Run the service
 
 Build the docker images
 ```bash
-make docker
+make docker-images
 ```
 
 Start a service
 ```bash
 make service_name
+
+# or start all services
+make docker-up
 ```
 
 Run tests

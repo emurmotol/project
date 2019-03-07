@@ -53,12 +53,19 @@ user_api:
 api:
 	docker-compose -f ./api/docker-compose.yml up
 
-.PHONY: down
-down:
+.PHONY: docker-down
+docker-down:
 	docker-compose -f ./user_api/docker-compose.yml down
 	docker-compose -f ./auth_api/docker-compose.yml down
 	docker-compose -f ./api/docker-compose.yml down
 	docker-compose -f ./server/docker-compose.yml down
+
+.PHONY: docker-up
+docker-up:
+	docker-compose -f ./user_api/docker-compose.yml up -d
+	docker-compose -f ./auth_api/docker-compose.yml up -d
+	docker-compose -f ./api/docker-compose.yml up -d
+	docker-compose -f ./server/docker-compose.yml up -d
 
 .PHONY: server
 server:
@@ -66,8 +73,8 @@ server:
 	mkdir -p ./server/redis/data
 	docker-compose -f ./server/docker-compose.yml up
 
-.PHONY: migrate
-migrate:
+.PHONY: migrate-up
+migrate-up:
 	migrate -verbose -source file://server/postgres/migrations -database postgres://root:postgres@localhost:5433/project?sslmode=disable up
 
 .PHONY: migrate-down
