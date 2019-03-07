@@ -33,6 +33,7 @@ require (
 	github.com/openzipkin/zipkin-go-opentracing v0.3.5
 	github.com/prometheus/client_golang v0.9.2
 	github.com/spf13/viper v1.3.1
+	github.com/stretchr/testify v1.3.0
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v0.0.0-20170224212429-dcecefd839c4 // indirect
 	golang.org/x/arch v0.0.0-20190226203302-36aee92af9e8 // indirect
