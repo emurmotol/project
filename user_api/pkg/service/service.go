@@ -5,8 +5,6 @@ import (
 	"strings"
 	"time"
 
-	// "github.com/casbin/casbin"
-	// gormadapter "github.com/casbin/gorm-adapter"
 	"github.com/emurmotol/project/user_api/pkg/utils"
 )
 

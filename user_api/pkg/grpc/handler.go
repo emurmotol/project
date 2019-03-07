@@ -8,12 +8,12 @@ import (
 	"github.com/go-kit/kit/auth/jwt"
 	grpc "github.com/go-kit/kit/transport/grpc"
 	context1 "golang.org/x/net/context"
-	stdgrpc "google.golang.org/grpc"
+	// stdgrpc "google.golang.org/grpc"
 )
 
 func makeGetByUsernameHandler(endpoints endpoint.Endpoints, options []grpc.ServerOption) grpc.Handler {
 	options = append(options, grpc.ServerBefore(jwt.GRPCToContext()))
-	options = append(options, stdgrpc.UnaryInterceptor(grpc.Interceptor))
+	// options = append(options, stdgrpc.UnaryInterceptor(grpc.Interceptor))
 	return grpc.NewServer(endpoints.GetByUsernameEndpoint, decodeGetByUsernameRequest, encodeGetByUsernameResponse, options...)
 }
 

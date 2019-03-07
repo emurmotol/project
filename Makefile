@@ -32,7 +32,8 @@ build: cp-jwt-certs proto
 
 .PHONY: test
 test:
-	go test -v ./... -cover
+	go test -v ./auth_api/... -cover
+	go test -v ./user_api/... -cover
 
 .PHONY: docker-images
 docker-images:
