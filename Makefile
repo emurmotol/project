@@ -49,6 +49,10 @@ auth:
 user:
 	docker-compose -f ./user/docker-compose.yml up
 
+.PHONY: user-seeder
+user-seeder:
+	go run ./user/cmd/seeder/main.go
+
 .PHONY: api
 api:
 	docker-compose -f ./api/docker-compose.yml up
@@ -69,8 +73,6 @@ docker-up:
 
 .PHONY: server
 server:
-	mkdir -p ./server/postgres/data
-	mkdir -p ./server/redis/data
 	docker-compose -f ./server/docker-compose.yml up
 
 .PHONY: migrate-up

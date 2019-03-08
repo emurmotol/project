@@ -18,9 +18,8 @@ import (
 var (
 	testUserClient UserClient
 	testAuthClient AuthClient
-	authorization     string
-	authUser          *User
-	authUserPassword  = "secret"
+	authorization  string
+	authUser       *User
 )
 
 func setTestAuthClient() {
@@ -57,9 +56,10 @@ func setTestAuthorization() {
 	ctx := context.Background()
 
 	authUser = &User{
-		Username: "foobar1",
+		Username: "testuser",
+		Password: "secret",
 	}
-	reply, err := testAuthClient.Login(ctx, &LoginRequest{Username: authUser.Username, Password: authUserPassword})
+	reply, err := testAuthClient.Login(ctx, &LoginRequest{Username: authUser.Username, Password: authUser.Password})
 	if err != nil {
 		panic(err)
 	}
@@ -70,7 +70,8 @@ func TestMain(m *testing.M) {
 	setTestAuthClient()
 	setTestUserClient()
 	setTestAuthorization()
-	os.Exit(m.Run())
+	code := m.Run()
+	os.Exit(code)
 }
 
 func TestCreateUser(t *testing.T) {

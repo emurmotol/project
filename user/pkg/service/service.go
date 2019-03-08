@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/emurmotol/project/user/pkg/utils"
+	stdgrpc "google.golang.org/grpc"
 )
 
 // UserService describes the service.
@@ -76,7 +77,7 @@ func (b *basicUserService) CreateUser(ctx context.Context, username string, emai
 	}
 
 	enforcer := utils.GetCasbinEnforcer(ctx)
-	enforcer.AddPolicy(role, "object", "read")
+	enforcer.AddPolicy(role, stdgrpc.ServerTransportStreamFromContext(ctx).Method(), "read")
 	return user, nil
 }
 
