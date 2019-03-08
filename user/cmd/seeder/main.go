@@ -30,17 +30,19 @@ func main() {
 	casbinRules := []service.CasbinRule{
 		service.CasbinRule{
 			PType: "p",
-			V0:    "/pb.User/CreateUser",
-			V1:    "read",
+			V0:    "user",
+			V1:    "/pb.User/CreateUser",
+			V2:    "read",
 		},
 		service.CasbinRule{
 			PType: "p",
-			V0:    "/pb.User/GetByUsername",
-			V1:    "read",
+			V0:    "user",
+			V1:    "/pb.User/GetByUsername",
+			V2:    "read",
 		},
 	}
 	for _, cr := range casbinRules {
-		if err := db.FirstOrCreate(&cr, service.CasbinRule{V0: cr.V0, V1: cr.V1}).Error; err != nil {
+		if err := db.FirstOrCreate(&cr, service.CasbinRule{V0: cr.V0, V1: cr.V1, V2: cr.V2}).Error; err != nil {
 			panic(err)
 		}
 		log.Println(cr)
