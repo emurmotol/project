@@ -16,11 +16,11 @@ import (
 )
 
 var (
-	testUserClient UserClient
-	testAuthClient AuthClient
-	authorization     string
-	authUser          *User
-	authUserPassword  = "secret"
+	testUserClient   UserClient
+	testAuthClient   AuthClient
+	authorization    string
+	authUser         *User
+	authUserPassword = "secret"
 )
 
 func setTestAuthClient() {
@@ -70,7 +70,8 @@ func TestMain(m *testing.M) {
 	setTestAuthClient()
 	setTestUserClient()
 	setTestAuthorization()
-	os.Exit(m.Run())
+	code := m.Run()
+	os.Exit(code)
 }
 
 func TestCreateUser(t *testing.T) {

@@ -69,8 +69,6 @@ docker-up:
 
 .PHONY: server
 server:
-	mkdir -p ./server/postgres/data
-	mkdir -p ./server/redis/data
 	docker-compose -f ./server/docker-compose.yml up
 
 .PHONY: migrate-up
