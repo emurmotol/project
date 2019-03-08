@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/emurmotol/project/user/pkg/service"
+	"github.com/emurmotol/project/user/pkg/utils"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
@@ -27,14 +28,14 @@ func main() {
 	}
 	log.Println(user)
 
-	casbinRules := []service.CasbinRule{
-		service.CasbinRule{
+	casbinRules := []utils.CasbinRule{
+		utils.CasbinRule{
 			PType: "p",
 			V0:    "user",
 			V1:    "/pb.User/CreateUser",
 			V2:    "read",
 		},
-		service.CasbinRule{
+		utils.CasbinRule{
 			PType: "p",
 			V0:    "user",
 			V1:    "/pb.User/GetByUsername",
@@ -42,7 +43,7 @@ func main() {
 		},
 	}
 	for _, cr := range casbinRules {
-		if err := db.FirstOrCreate(&cr, service.CasbinRule{V0: cr.V0, V1: cr.V1, V2: cr.V2}).Error; err != nil {
+		if err := db.FirstOrCreate(&cr, utils.CasbinRule{V0: cr.V0, V1: cr.V1, V2: cr.V2}).Error; err != nil {
 			panic(err)
 		}
 		log.Println(cr)
