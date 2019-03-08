@@ -39,4 +39,5 @@ require (
 	golang.org/x/net v0.0.0-20190227160552-c95aed5357e7
 	google.golang.org/grpc v1.19.0
 	sourcegraph.com/sourcegraph/appdash v0.0.0-20190107175209-d9ea5c54f7dc
+	syreclabs.com/go/faker v1.0.1
 )
