@@ -49,6 +49,10 @@ auth:
 user:
 	docker-compose -f ./user/docker-compose.yml up
 
+.PHONY: user-seeder
+user-seeder:
+	go run ./user/cmd/seeder/main.go
+
 .PHONY: api
 api:
 	docker-compose -f ./api/docker-compose.yml up

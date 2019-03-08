@@ -15,13 +15,14 @@ func main() {
 	}
 	defer db.Close()
 
+	username := "testuser"
 	user := service.User{
-		Username: "testuser",
+		Username: username,
 		Email:    "testuser@example.com",
 		Password: "secret",
 		Role:     "user",
 	}
-	if err := db.FirstOrCreate(&user).Error; err != nil {
+	if err := db.FirstOrCreate(&user, service.User{Username: username}).Error; err != nil {
 		panic(err)
 	}
 	log.Println(user)
