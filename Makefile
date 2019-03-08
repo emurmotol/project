@@ -1,13 +1,13 @@
 .PHONY: jwt-certs
 jwt-certs:
-	openssl genrsa | openssl pkcs8 -topk8 -v2 aes-128-ecb -out ./auth_api/certs/jwt.p8 -passout pass:
-	openssl pkcs8 -in ./auth_api/certs/jwt.p8 -out ./auth_api/certs/jwt.pem -passin pass:
-	openssl rsa -in ./auth_api/certs/jwt.pem -out ./auth_api/certs/jwt.key
-	openssl rsa -in ./auth_api/certs/jwt.key -pubout -out ./auth_api/certs/jwt.key.pub
+	openssl genrsa | openssl pkcs8 -topk8 -v2 aes-128-ecb -out ./auth/certs/jwt.p8 -passout pass:
+	openssl pkcs8 -in ./auth/certs/jwt.p8 -out ./auth/certs/jwt.pem -passin pass:
+	openssl rsa -in ./auth/certs/jwt.pem -out ./auth/certs/jwt.key
+	openssl rsa -in ./auth/certs/jwt.key -pubout -out ./auth/certs/jwt.key.pub
 
 .PHONY: cp-jwt-certs
 cp-jwt-certs:
-	cp ./auth_api/certs/jwt.key.pub ./user_api/certs
+	cp ./auth/certs/jwt.key.pub ./user/certs
 
 .PHONY: install
 install: jwt-certs
@@ -21,33 +21,33 @@ install: jwt-certs
 
 .PHONY: proto
 proto:
-	cd ${GOPATH}/src/github.com/emurmotol/project/auth_api/pkg/grpc/pb; ./compile.sh
-	cd ${GOPATH}/src/github.com/emurmotol/project/user_api/pkg/grpc/pb; ./compile.sh
+	cd ${GOPATH}/src/github.com/emurmotol/project/auth/pkg/grpc/pb; ./compile.sh
+	cd ${GOPATH}/src/github.com/emurmotol/project/user/pkg/grpc/pb; ./compile.sh
 
 .PHONY: build
 build: cp-jwt-certs proto 
-	go build -o ./auth_api/auth_api ./auth_api/cmd
-	go build -o ./user_api/user_api ./user_api/cmd
+	go build -o ./auth/auth ./auth/cmd
+	go build -o ./user/user ./user/cmd
 	go build -o ./api/api ./api/server
 
 .PHONY: test
 test:
-	go test -v ./auth_api/... -cover -count=1
-	go test -v ./user_api/... -cover -count=1
+	go test -v ./auth/... -cover -count=1
+	go test -v ./user/... -cover -count=1
 
 .PHONY: docker-images
 docker-images:
-	docker build ./auth_api -t emurmotol/auth_api:latest
-	docker build ./user_api -t emurmotol/user_api:latest
+	docker build ./auth -t emurmotol/auth:latest
+	docker build ./user -t emurmotol/user:latest
 	docker build ./api -t emurmotol/api:latest
 
-.PHONY: auth_api
-auth_api:
-	docker-compose -f ./auth_api/docker-compose.yml up
+.PHONY: auth
+auth:
+	docker-compose -f ./auth/docker-compose.yml up
 
-.PHONY: user_api
-user_api:
-	docker-compose -f ./user_api/docker-compose.yml up
+.PHONY: user
+user:
+	docker-compose -f ./user/docker-compose.yml up
 
 .PHONY: api
 api:
@@ -55,15 +55,15 @@ api:
 
 .PHONY: docker-down
 docker-down:
-	docker-compose -f ./user_api/docker-compose.yml down
-	docker-compose -f ./auth_api/docker-compose.yml down
+	docker-compose -f ./user/docker-compose.yml down
+	docker-compose -f ./auth/docker-compose.yml down
 	docker-compose -f ./api/docker-compose.yml down
 	docker-compose -f ./server/docker-compose.yml down
 
 .PHONY: docker-up
 docker-up:
-	docker-compose -f ./user_api/docker-compose.yml up -d
-	docker-compose -f ./auth_api/docker-compose.yml up -d
+	docker-compose -f ./user/docker-compose.yml up -d
+	docker-compose -f ./auth/docker-compose.yml up -d
 	docker-compose -f ./api/docker-compose.yml up -d
 	docker-compose -f ./server/docker-compose.yml up -d
 

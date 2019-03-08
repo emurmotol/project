@@ -1,0 +1,17 @@
+version: "2"
+services:
+  user:
+    build:
+      context: .
+    restart: always
+    volumes:
+    - .:/go/src/github.com/emurmotol/project/user
+    image: emurmotol/user:latest
+    container_name: user
+    ports:
+    - 8087:8082
+    environment:
+    - JWT_PUBLIC_KEY=/go/src/github.com/emurmotol/project/user/certs/jwt.key.pub
+    - POSTGRES_DATABASE=postgres://root:postgres@10.10.2.250:5433/project?sslmode=disable
+    # - POSTGRES_DATABASE=postgres://root:postgres@192.168.0.33:5433/project?sslmode=disable
+    - CASBIN_MODEL=/go/src/github.com/emurmotol/project/user/casbin_model/rbac_model.conf

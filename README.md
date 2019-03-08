@@ -36,8 +36,8 @@ Installable via Makefile
 ## Services
 
 - [API](https://github.com/emurmotol/project/tree/master/api) - API Microservice (GraphQL)
-- [Auth API](https://github.com/emurmotol/project/tree/master/auth_api) - Authentication Microservice
-- [User API](https://github.com/emurmotol/project/tree/master/user_api) - User Management Microservice
+- [Auth](https://github.com/emurmotol/project/tree/master/auth) - Authentication Microservice
+- [User](https://github.com/emurmotol/project/tree/master/user) - User Management Microservice
 
 ## Usage
 

@@ -1,0 +1,19 @@
+version: "2"
+services:
+  auth:
+    build:
+      context: .
+    restart: always
+    volumes:
+    - .:/go/src/github.com/emurmotol/project/auth
+    image: emurmotol/auth:latest
+    container_name: auth
+    ports:
+    - 8085:8082
+    environment:
+    - JWT_PRIVATE_KEY=/go/src/github.com/emurmotol/project/auth/certs/jwt.key
+    - JWT_PUBLIC_KEY=/go/src/github.com/emurmotol/project/auth/certs/jwt.key.pub
+    - JWT_EXPIRES_IN_SECONDS=86400
+    - JWT_TOKEN_TYPE=Bearer
+    - USER_API_GRPC_ADDRESS=10.10.2.250:8087
+    # - USER_API_GRPC_ADDRESS=192.168.0.33:8087
