@@ -8,7 +8,7 @@ This is the Mono Repo Project
 - [Configuration](#configuration)
 - [Services](#services)
 - [Usage](#usage)
-- [Postman Collection](#postman-collection)
+- [Notes](#notes)
 - [Donations](#donations)
 
 ## Dependencies
