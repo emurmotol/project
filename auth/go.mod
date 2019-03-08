@@ -3,7 +3,6 @@ module github.com/emurmotol/project/auth
 require (
 	github.com/davecgh/go-spew v1.1.1
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
-	github.com/emurmotol/project/api v0.0.0-20190305030225-dd45c5f8a346
 	github.com/go-kit/kit v0.8.0
 	github.com/golang/protobuf v1.3.0
 	github.com/gorilla/handlers v1.4.0
