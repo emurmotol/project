@@ -2,26 +2,33 @@ package pb
 
 import (
 	context "context"
-	fmt "fmt"
+	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
 	"testing"
-	"time"
 
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/stretchr/testify/assert"
 	grpc "google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
+	"syreclabs.com/go/faker"
 )
 
-var svc UserApiClient
+var (
+	testUserApiClient UserApiClient
+	testAuthApiClient AuthApiClient
+	authorization     string
+	authUser          *User
+	authUserPassword  = "secret"
+)
 
-func TestMain(m *testing.M) {
-	conn, err := grpc.Dial(":8087", grpc.WithInsecure())
+func setTestAuthApiClient() {
+	conn, err := grpc.Dial(":8085", grpc.WithInsecure())
 	if err != nil {
 		panic(err)
 	}
-	svc = NewUserApiClient(conn)
+	testAuthApiClient = NewAuthApiClient(conn)
 
 	c := make(chan os.Signal)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
@@ -29,19 +36,55 @@ func TestMain(m *testing.M) {
 		<-c
 		conn.Close()
 	}()
+}
+
+func setTestUserApiClient() {
+	conn, err := grpc.Dial(":8087", grpc.WithInsecure())
+	if err != nil {
+		panic(err)
+	}
+	testUserApiClient = NewUserApiClient(conn)
+
+	c := make(chan os.Signal)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		<-c
+		conn.Close()
+	}()
+}
+
+func setTestAuthorization() {
+	ctx := context.Background()
+
+	authUser = &User{
+		Username: "foobar1",
+	}
+	reply, err := testAuthApiClient.Login(ctx, &LoginRequest{Username: authUser.Username, Password: authUserPassword})
+	if err != nil {
+		panic(err)
+	}
+	authorization = fmt.Sprintf("%s %s", reply.TokenType, reply.AccessToken)
+}
+
+func TestMain(m *testing.M) {
+	setTestAuthApiClient()
+	setTestUserApiClient()
+	setTestAuthorization()
 	os.Exit(m.Run())
 }
 
 func TestCreateUser(t *testing.T) {
 	assert := assert.New(t)
 	ctx := context.Background()
-	prefix := time.Now().Unix()
-	reply, err := svc.CreateUser(ctx, &CreateUserRequest{
-		Username: fmt.Sprintf("foobar1_%d", prefix),
-		// Username: "foobar1",
-		Email: fmt.Sprintf("foobar1_%d@gmail.com", prefix),
-		// Email:    "foobar1@gmail.com",
-		Password: "secret",
+	username := faker.Internet().UserName()
+	email := faker.Internet().SafeEmail()
+	password := "secret"
+	md := metadata.Pairs("authorization", authorization)
+	ctx = metadata.NewOutgoingContext(ctx, md)
+	reply, err := testUserApiClient.CreateUser(ctx, &CreateUserRequest{
+		Username: username,
+		Email:    email,
+		Password: password,
 		Role:     "user",
 	})
 	if err != nil {
@@ -53,9 +96,10 @@ func TestCreateUser(t *testing.T) {
 
 func TestGetByUsername(t *testing.T) {
 	assert := assert.New(t)
-	md := metadata.Pairs("authorization", "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiIwLjAuMC4wIiwiZXhwIjoxNTUyMDUxODIzLCJqdGkiOiIzZGM1ZDFhOC1kODkzLTQxY2EtYmFkMS03MjdmMWVhZDVhNWYiLCJpYXQiOjE1NTE5NjU0MjMsImlzcyI6IjAuMC4wLjAiLCJzdWIiOiJ1c2VyIn0.iHArP4tzk2FDBf1DG4JuODKcla-VTPPT-1gPQRzwVE1L8C6AdS5Z5FKSd6nVt3gsRX8wBJPXu4vZ_xHdoNV9v9b4h2S0bpm85qh_shl10al5CZJwS26SZ_e7GHK-sa_nXYXeZ9vTXFPPXUwMJedA1YIWWwT47_nSKtIOfP5Ma6kNufll0G9Pu0c_EuBhpV8KaybIey3X9Avf2gGY4I89KGiCMHdw2A2d1KI2ZKt7NvJrEfCVXK_Jqf8TmcBOSL9Yd4l7LderrA6rCES7HXQg8GraLvY3uKPCc7kBiA-zPl6U8jhxBzVuVWK495SwkHVRmbESLk3TQD10fGtIsQfn_A")
-	ctx := metadata.NewOutgoingContext(context.Background(), md)
-	reply, err := svc.GetByUsername(ctx, &GetByUsernameRequest{Username: "foobar1"})
+	ctx := context.Background()
+	md := metadata.Pairs("authorization", authorization)
+	ctx = metadata.NewOutgoingContext(ctx, md)
+	reply, err := testUserApiClient.GetByUsername(ctx, &GetByUsernameRequest{Username: authUser.Username})
 	if err != nil {
 		assert.Nil(err)
 		return
@@ -66,7 +110,7 @@ func TestGetByUsername(t *testing.T) {
 func TestGetUserForAuth(t *testing.T) {
 	assert := assert.New(t)
 	ctx := context.Background()
-	reply, err := svc.GetUserForAuth(ctx, &GetUserForAuthRequest{Username: "foobar1"})
+	reply, err := testUserApiClient.GetUserForAuth(ctx, &GetUserForAuthRequest{Username: authUser.Username})
 	if err != nil {
 		assert.Nil(err)
 		return

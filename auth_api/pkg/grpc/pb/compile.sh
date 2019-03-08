@@ -19,3 +19,4 @@
 
 protoc auth_api.proto --go_out=plugins=grpc:.
 protoc auth_api.proto --go_out=plugins=grpc:../../../../api/pb
+protoc auth_api.proto --go_out=plugins=grpc:../../../../user_api/pkg/grpc/pb

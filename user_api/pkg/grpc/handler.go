@@ -38,6 +38,8 @@ func (g *grpcServer) GetByUsername(ctx context1.Context, req *pb.GetByUsernameRe
 }
 
 func makeCreateUserHandler(endpoints endpoint.Endpoints, options []grpc.ServerOption) grpc.Handler {
+	options = append(options, grpc.ServerBefore(jwt.GRPCToContext()))
+	// options = append(options, stdgrpc.UnaryInterceptor(grpc.Interceptor))
 	return grpc.NewServer(endpoints.CreateUserEndpoint, decodeCreateUserRequest, encodeCreateUserResponse, options...)
 }
 

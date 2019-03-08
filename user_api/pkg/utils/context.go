@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 
+	stdcasbin "github.com/casbin/casbin"
+	"github.com/go-kit/kit/auth/casbin"
 	"github.com/go-kit/kit/auth/jwt"
 	"github.com/go-kit/kit/transport/grpc"
 	"github.com/jinzhu/gorm"
@@ -49,4 +51,16 @@ func MustGetRequestMethod(ctx context.Context) (string, error) {
 		return "", errors.New("failed to get ContextKeyRequestMethod value from context")
 	}
 	return rm, nil
+}
+
+func GetCasbinEnforcer(ctx context.Context) *stdcasbin.Enforcer {
+	return ctx.Value(casbin.CasbinEnforcerContextKey).(*stdcasbin.Enforcer)
+}
+
+func MustGetCasbinEnforcer(ctx context.Context) (*stdcasbin.Enforcer, error) {
+	e, ok := ctx.Value(casbin.CasbinEnforcerContextKey).(*stdcasbin.Enforcer)
+	if !ok {
+		return nil, errors.New("failed to get CasbinEnforcerContextKey value from context")
+	}
+	return e, nil
 }

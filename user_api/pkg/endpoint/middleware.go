@@ -67,7 +67,8 @@ func AuthorizerMiddleware() endpoint.Middleware {
 			ctx = context.WithValue(ctx, casbin.CasbinPolicyContextKey, gormadapter.NewAdapterByDB(db))
 
 			subject := utils.GetClaims(ctx).Subject
-			object := utils.GetRequestMethod(ctx)
+			// object := utils.GetRequestMethod(ctx)
+			object := "object"
 			action := "read"
 			e := func(ctx1 context.Context, i interface{}) (interface{}, error) { return ctx1, nil }
 			mw := casbin.NewEnforcer(subject, object, action)(e)

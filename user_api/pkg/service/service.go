@@ -75,8 +75,8 @@ func (b *basicUserApiService) CreateUser(ctx context.Context, username string, e
 		return User{}, err
 	}
 
-	// enforcer := stdcasbin.NewEnforcer(viper.GetString("CASBIN_MODEL"), gormadapter.NewAdapterByDB(db))
-	// enforcer.AddPolicy(utils.GetClaims(ctx).Id, "object", "read")
+	enforcer := utils.GetCasbinEnforcer(ctx)
+	enforcer.AddPolicy(role, "object", "read")
 	return user, nil
 }
 

@@ -2,24 +2,32 @@ package pb
 
 import (
 	context "context"
+	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
 	"testing"
 
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/stretchr/testify/assert"
 	grpc "google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 )
 
-var svc AuthApiClient
+var (
+	testUserApiClient UserApiClient
+	testAuthApiClient AuthApiClient
+	authorization     string
+	authUser          *User
+	authUserPassword  = "secret"
+)
 
-func TestMain(m *testing.M) {
+func setTestAuthApiClient() {
 	conn, err := grpc.Dial(":8085", grpc.WithInsecure())
 	if err != nil {
 		panic(err)
 	}
-	svc = NewAuthApiClient(conn)
+	testAuthApiClient = NewAuthApiClient(conn)
 
 	c := make(chan os.Signal)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
@@ -27,13 +35,46 @@ func TestMain(m *testing.M) {
 		<-c
 		conn.Close()
 	}()
+}
+
+func setTestUserApiClient() {
+	conn, err := grpc.Dial(":8087", grpc.WithInsecure())
+	if err != nil {
+		panic(err)
+	}
+	testUserApiClient = NewUserApiClient(conn)
+
+	c := make(chan os.Signal)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		<-c
+		conn.Close()
+	}()
+}
+
+func setTestAuthorization() {
+	ctx := context.Background()
+
+	authUser = &User{
+		Username: "foobar1",
+	}
+	reply, err := testAuthApiClient.Login(ctx, &LoginRequest{Username: authUser.Username, Password: authUserPassword})
+	if err != nil {
+		panic(err)
+	}
+	authorization = fmt.Sprintf("%s %s", reply.TokenType, reply.AccessToken)
+}
+func TestMain(m *testing.M) {
+	setTestAuthApiClient()
+	setTestUserApiClient()
+	setTestAuthorization()
 	os.Exit(m.Run())
 }
 
 func TestLogin(t *testing.T) {
 	assert := assert.New(t)
 	ctx := context.Background()
-	reply, err := svc.Login(ctx, &LoginRequest{Username: "foobar1", Password: "secret"})
+	reply, err := testAuthApiClient.Login(ctx, &LoginRequest{Username: authUser.Username, Password: authUserPassword})
 	if err != nil {
 		assert.Nil(err)
 		return
@@ -43,9 +84,10 @@ func TestLogin(t *testing.T) {
 
 func TestRestricted(t *testing.T) {
 	assert := assert.New(t)
-	md := metadata.Pairs("authorization", "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiIwLjAuMC4wIiwiZXhwIjoxNTUyMDUxODIzLCJqdGkiOiIzZGM1ZDFhOC1kODkzLTQxY2EtYmFkMS03MjdmMWVhZDVhNWYiLCJpYXQiOjE1NTE5NjU0MjMsImlzcyI6IjAuMC4wLjAiLCJzdWIiOiJ1c2VyIn0.iHArP4tzk2FDBf1DG4JuODKcla-VTPPT-1gPQRzwVE1L8C6AdS5Z5FKSd6nVt3gsRX8wBJPXu4vZ_xHdoNV9v9b4h2S0bpm85qh_shl10al5CZJwS26SZ_e7GHK-sa_nXYXeZ9vTXFPPXUwMJedA1YIWWwT47_nSKtIOfP5Ma6kNufll0G9Pu0c_EuBhpV8KaybIey3X9Avf2gGY4I89KGiCMHdw2A2d1KI2ZKt7NvJrEfCVXK_Jqf8TmcBOSL9Yd4l7LderrA6rCES7HXQg8GraLvY3uKPCc7kBiA-zPl6U8jhxBzVuVWK495SwkHVRmbESLk3TQD10fGtIsQfn_A")
-	ctx := metadata.NewOutgoingContext(context.Background(), md)
-	reply, err := svc.Restricted(ctx, &RestrictedRequest{})
+	ctx := context.Background()
+	md := metadata.Pairs("authorization", authorization)
+	ctx = metadata.NewOutgoingContext(ctx, md)
+	reply, err := testAuthApiClient.Restricted(ctx, &RestrictedRequest{})
 	if err != nil {
 		assert.Nil(err)
 		return
@@ -56,7 +98,7 @@ func TestRestricted(t *testing.T) {
 func TestHealthCheck(t *testing.T) {
 	assert := assert.New(t)
 	ctx := context.Background()
-	reply, err := svc.HealthCheck(ctx, &HealthCheckRequest{})
+	reply, err := testAuthApiClient.HealthCheck(ctx, &HealthCheckRequest{})
 	if err != nil {
 		assert.Nil(err)
 		return

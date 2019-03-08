@@ -109,6 +109,7 @@ func getEndpointMiddleware(logger log.Logger) (mw map[string][]endpoint1.Middlew
 
 	// casbin middleware
 	mw["GetByUsername"] = append(mw["GetByUsername"], endpoint.AuthorizerMiddleware())
+	mw["CreateUser"] = append(mw["CreateUser"], endpoint.AuthorizerMiddleware())
 
 	// postgres middleware
 	addEndpointMiddlewareToAllMethods(mw, endpoint.PostgresMiddleware())
@@ -126,6 +127,7 @@ func getEndpointMiddleware(logger log.Logger) (mw map[string][]endpoint1.Middlew
 	}
 	jwtMiddleware := jwt.NewParser(keyFunc, stdjwt.SigningMethodRS256, newClaims)
 	mw["GetByUsername"] = append(mw["GetByUsername"], jwtMiddleware)
+	mw["CreateUser"] = append(mw["CreateUser"], jwtMiddleware)
 	return
 }
 func initMetricsEndpoint(g *group.Group) {
