@@ -68,7 +68,7 @@ func AuthorizerMiddleware() endpoint.Middleware {
 
 			subject := utils.GetClaims(ctx).Subject
 			// object := utils.GetRequestMethod(ctx)
-			object := "object"
+			object := "/package.service/method"
 			action := "read"
 			e := func(ctx1 context.Context, i interface{}) (interface{}, error) { return ctx1, nil }
 			mw := casbin.NewEnforcer(subject, object, action)(e)

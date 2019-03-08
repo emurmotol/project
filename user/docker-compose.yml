@@ -14,6 +14,4 @@ services:
     - JWT_PUBLIC_KEY=/go/src/github.com/emurmotol/project/user/certs/jwt.key.pub
     # - POSTGRES_DATABASE=postgres://root:postgres@10.10.2.250:5433/project?sslmode=disable
     - POSTGRES_DATABASE=postgres://root:postgres@192.168.0.33:5433/project?sslmode=disable
-    # - POSTGRES_DATABASE_TEST=postgres://root:postgres@10.10.2.250:5433/project_test?sslmode=disable
-    - POSTGRES_DATABASE_TEST=postgres://root:postgres@192.168.0.33:5433/project_test?sslmode=disable
     - CASBIN_MODEL=/go/src/github.com/emurmotol/project/user/casbin_model/rbac_model.conf
