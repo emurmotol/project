@@ -7,7 +7,6 @@ import (
 	stdcasbin "github.com/casbin/casbin"
 	"github.com/go-kit/kit/auth/casbin"
 	"github.com/go-kit/kit/auth/jwt"
-	"github.com/go-kit/kit/transport/grpc"
 	"github.com/jinzhu/gorm"
 )
 
@@ -39,18 +38,6 @@ func MustGetClaims(ctx context.Context) (*JWTClaims, error) {
 		return nil, errors.New("failed to get JWTClaimsContextKey value from context")
 	}
 	return db, nil
-}
-
-func GetRequestMethod(ctx context.Context) string {
-	return ctx.Value(grpc.ContextKeyRequestMethod).(string)
-}
-
-func MustGetRequestMethod(ctx context.Context) (string, error) {
-	rm, ok := ctx.Value(grpc.ContextKeyRequestMethod).(string)
-	if !ok {
-		return "", errors.New("failed to get ContextKeyRequestMethod value from context")
-	}
-	return rm, nil
 }
 
 func GetCasbinEnforcer(ctx context.Context) *stdcasbin.Enforcer {

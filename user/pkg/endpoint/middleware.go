@@ -14,6 +14,7 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/spf13/viper"
+	stdgrpc "google.golang.org/grpc"
 )
 
 // InstrumentingMiddleware returns an endpoint middleware that records
@@ -67,8 +68,7 @@ func AuthorizerMiddleware() endpoint.Middleware {
 			ctx = context.WithValue(ctx, casbin.CasbinPolicyContextKey, gormadapter.NewAdapterByDB(db))
 
 			subject := utils.GetClaims(ctx).Subject
-			// object := utils.GetRequestMethod(ctx)
-			object := "/package.service/method"
+			object := stdgrpc.ServerTransportStreamFromContext(ctx).Method()
 			action := "read"
 			e := func(ctx1 context.Context, i interface{}) (interface{}, error) { return ctx1, nil }
 			mw := casbin.NewEnforcer(subject, object, action)(e)
