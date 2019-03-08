@@ -76,7 +76,7 @@ func (b *basicUserService) CreateUser(ctx context.Context, username string, emai
 	}
 
 	enforcer := utils.GetCasbinEnforcer(ctx)
-	enforcer.AddPolicy(role, "object", "read")
+	enforcer.AddPolicy(role, "/package.service/method", "read")
 	return user, nil
 }
 
