@@ -4,6 +4,7 @@ require (
 	github.com/99designs/gqlgen v0.7.2
 	github.com/emurmotol/project/api v0.0.0
 	github.com/emurmotol/project/auth v0.0.0
+	github.com/emurmotol/project/auth_api v0.0.0-20190308075526-e3ea4d08b23a // indirect
 	github.com/emurmotol/project/user v0.0.0
 	github.com/go-kit/kit v0.8.0
 	github.com/golang/protobuf v1.3.0

@@ -4,12 +4,12 @@ require (
 	github.com/davecgh/go-spew v1.1.1
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/emurmotol/project/api v0.0.0-20190305030225-dd45c5f8a346
-	github.com/emurmotol/project/auth_api v0.0.0-20190308075526-e3ea4d08b23a // indirect
 	github.com/go-kit/kit v0.8.0
 	github.com/golang/protobuf v1.3.0
 	github.com/gorilla/handlers v1.4.0
 	github.com/gorilla/mux v1.7.0
 	github.com/jinzhu/gorm v1.9.2
+	github.com/lib/pq v1.0.0 // indirect
 	github.com/lightstep/lightstep-tracer-go v0.15.6
 	github.com/oklog/oklog v0.3.2
 	github.com/opentracing/opentracing-go v1.0.2
