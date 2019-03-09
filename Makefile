@@ -74,7 +74,7 @@ docker-up:
 
 .PHONY: server
 server:
-	cp ./server/gocryptotrader/config_example.json ${GOPATH}/src/github.com/thrasher-/gocryptotrader
+	docker cp ./server/gocryptotrader/config.json $(docker ps -aqf "ancestor=gocryptotrader_daemon"):/root/.gocryptotrader
 	docker-compose -f ./server/docker-compose.yml up
 
 .PHONY: migrate-up

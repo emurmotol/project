@@ -198,8 +198,8 @@
    "httpTimeout": 15000000000,
    "httpUserAgent": "",
    "authenticatedApiSupport": false,
-   "apiKey": "Key",
-   "apiSecret": "Secret",
+   "apiKey": "pbDsAcGhQZNBHETPvQ0u0t1qxX7ix5ffJizBrACKb5fdj5jbppBTY4b2ME9ILIub",
+   "apiSecret": "xajiKUGcV53jtWlVwNjtx5WMIMJ3ckH1eykqpZ2WM76xGaq18aDW5XnqMTQdtyJk",
    "apiUrl": "NON_DEFAULT_HTTP_LINK_TO_EXCHANGE_API",
    "apiUrlSecondary": "NON_DEFAULT_HTTP_LINK_TO_EXCHANGE_API",
    "proxyAddress": "",
@@ -1294,6 +1294,5 @@
    "supportedCurrencies": "USD",
    "supportedExchanges": "ANX,Kraken"
   }
- ],
- "test": ""
+ ]
 }
