@@ -60,7 +60,7 @@ server:
 
 .PHONY: user-seeder
 user-seeder:
-	go run ./user/cmd/seeder/main.go
+	go run ./user/cmd/seeder/main.go -database postgres://root:postgres@localhost:5433/project?sslmode=disable
 
 .PHONY: seeder
 seeder: user-seeder

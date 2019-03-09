@@ -1,7 +1,9 @@
 package main
 
 import (
+	"flag"
 	"log"
+	"os"
 
 	"github.com/emurmotol/project/user/pkg/service"
 	"github.com/emurmotol/project/user/pkg/utils"
@@ -9,8 +11,15 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
+var (
+	fs       = flag.NewFlagSet("user-seeder", flag.ExitOnError)
+	database = fs.String("database", "", "Postgres database URL")
+)
+
 func main() {
-	db, err := gorm.Open("postgres", "postgres://root:postgres@localhost:5433/project?sslmode=disable")
+	fs.Parse(os.Args[1:])
+
+	db, err := gorm.Open("postgres", *database)
 	if err != nil {
 		panic(err)
 	}
