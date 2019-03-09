@@ -74,8 +74,15 @@ docker-up:
 
 .PHONY: server
 server:
-	docker cp ./server/gocryptotrader/config.json $(docker ps -aqf "ancestor=gocryptotrader_daemon"):/root/.gocryptotrader
 	docker-compose -f ./server/docker-compose.yml up
+
+SERVER_GOCRYPTOTRADER_DAEMON_CONTAINER_ID:=$(shell docker ps -aqf "ancestor=server_gocryptotrader_daemon")
+.PHONY: gocryptotrader
+gocryptotrader:
+	docker cp ./server/gocryptotrader/config.json ${SERVER_GOCRYPTOTRADER_DAEMON_CONTAINER_ID}:/root/.gocryptotrader
+	docker commit ${SERVER_GOCRYPTOTRADER_DAEMON_CONTAINER_ID} server_gocryptotrader_daemon
+	docker rm -f ${SERVER_GOCRYPTOTRADER_DAEMON_CONTAINER_ID} gocryptotrader_web
+	docker-compose -f ./server/docker-compose.yml up -d gocryptotrader_daemon gocryptotrader_web
 
 .PHONY: migrate-up
 migrate-up:
