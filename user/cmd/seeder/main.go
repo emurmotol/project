@@ -17,11 +17,12 @@ func main() {
 	defer db.Close()
 
 	username := "testuser"
+	role := "user"
 	user := service.User{
 		Username: username,
 		Email:    "testuser@example.com",
 		Password: "secret",
-		Role:     "user",
+		Role:     role,
 	}
 	if err := db.FirstOrCreate(&user, service.User{Username: username}).Error; err != nil {
 		panic(err)
@@ -31,13 +32,13 @@ func main() {
 	casbinRules := []utils.CasbinRule{
 		utils.CasbinRule{
 			PType: "p",
-			V0:    "user",
+			V0:    role,
 			V1:    "/pb.User/CreateUser",
 			V2:    "read",
 		},
 		utils.CasbinRule{
 			PType: "p",
-			V0:    "user",
+			V0:    role,
 			V1:    "/pb.User/GetByUsername",
 			V2:    "read",
 		},
