@@ -10,7 +10,7 @@ cp-jwt-certs:
 	cp ./auth/certs/jwt.key.pub ./user/certs
 
 .PHONY: install
-install: jwt-certs
+install:
 	export GO111MODULE=off; go get -v google.golang.org/grpc
 	export GO111MODULE=off; go get -v github.com/golang/protobuf/protoc-gen-go
 	export GO111MODULE=on; go get -v github.com/go-kit/kit
@@ -26,7 +26,7 @@ proto:
 	cd ${GOPATH}/src/github.com/emurmotol/project/user/pkg/grpc/pb; ./compile.sh
 
 .PHONY: build
-build: cp-jwt-certs proto 
+build: jwt-certs cp-jwt-certs proto 
 	go build -o ./auth/auth ./auth/cmd
 	go build -o ./user/user ./user/cmd
 	go build -o ./api/api ./api/server
@@ -50,13 +50,20 @@ auth:
 user:
 	docker-compose -f ./user/docker-compose.yml up
 
+.PHONY: api
+api:
+	docker-compose -f ./api/docker-compose.yml up
+
+.PHONY: server
+server:
+	docker-compose -f ./server/docker-compose.yml up
+
 .PHONY: user-seeder
 user-seeder:
 	go run ./user/cmd/seeder/main.go
 
-.PHONY: api
-api:
-	docker-compose -f ./api/docker-compose.yml up
+.PHONY: seeder
+seeder: user-seeder
 
 .PHONY: docker-down
 docker-down:
@@ -71,10 +78,6 @@ docker-up:
 	docker-compose -f ./auth/docker-compose.yml up -d
 	docker-compose -f ./api/docker-compose.yml up -d
 	docker-compose -f ./server/docker-compose.yml up -d
-
-.PHONY: server
-server:
-	docker-compose -f ./server/docker-compose.yml up
 
 SERVER_GOCRYPTOTRADER_DAEMON_CONTAINER_ID:=$(shell docker ps -aqf "ancestor=server_gocryptotrader_daemon")
 .PHONY: gocryptotrader
