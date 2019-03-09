@@ -29,3 +29,15 @@ services:
     container_name: redis
     ports:
     - 6380:6379
+  gocryptotrader_web:
+    container_name: gocryptotrader_web
+    build: ${GOPATH}/src/github.com/thrasher-/gocryptotrader/web
+    depends_on:
+    - gocryptotrader_daemon
+    ports:
+    - 9051:80
+  gocryptotrader_daemon:
+    container_name: gocryptotrader_daemon
+    build: ${GOPATH}/src/github.com/thrasher-/gocryptotrader
+    ports:
+    - 9050:9050
