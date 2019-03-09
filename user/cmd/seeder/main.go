@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	fs       = flag.NewFlagSet("user-seeder", flag.ExitOnError)
+	fs       = flag.NewFlagSet("seeder", flag.ExitOnError)
 	database = fs.String("database", "", "Postgres database URL")
 )
 
