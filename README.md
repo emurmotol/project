@@ -28,6 +28,7 @@ Installable via Makefile
 - [postgres](https://www.postgresql.org/)
 - [redis](https://redis.io/)
 - [migrate](https://github.com/golang-migrate/migrate/tree/master/cli)
+- [gocryptotrader](https://github.com/thrasher-/gocryptotrader)
 
 ## Configuration
 
