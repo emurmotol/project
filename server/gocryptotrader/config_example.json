@@ -1294,5 +1294,6 @@
    "supportedCurrencies": "USD",
    "supportedExchanges": "ANX,Kraken"
   }
- ]
+ ],
+ "test": ""
 }

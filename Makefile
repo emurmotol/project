@@ -74,6 +74,7 @@ docker-up:
 
 .PHONY: server
 server:
+	cp ./server/gocryptotrader/config_example.json ${GOPATH}/src/github.com/thrasher-/gocryptotrader
 	docker-compose -f ./server/docker-compose.yml up
 
 .PHONY: migrate-up

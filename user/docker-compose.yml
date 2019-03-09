@@ -1,8 +1,7 @@
 version: "2"
 services:
   user:
-    build:
-      context: .
+    build: .
     restart: always
     volumes:
     - .:/go/src/github.com/emurmotol/project/user
