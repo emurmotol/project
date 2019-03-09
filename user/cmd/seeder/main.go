@@ -53,7 +53,13 @@ func main() {
 		},
 	}
 	for _, cr := range casbinRules {
-		if err := db.FirstOrCreate(&cr, utils.CasbinRule{V0: cr.V0, V1: cr.V1, V2: cr.V2}).Error; err != nil {
+		where := utils.CasbinRule{
+			PType: cr.PType,
+			V0:    cr.V0,
+			V1:    cr.V1,
+			V2:    cr.V2,
+		}
+		if err := db.FirstOrCreate(&cr, where).Error; err != nil {
 			panic(err)
 		}
 		log.Println(cr)
